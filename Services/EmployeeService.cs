@@ -67,6 +67,7 @@ namespace DispositionSystemAPI.Services
             var employees = _context
                 .Employees
                 .Include(a => a.Address)
+                .Where(e => e.DepartmentId == departmentId)
                 .ToList();
                 
             var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
