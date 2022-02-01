@@ -28,17 +28,15 @@ namespace DispositionSystemAPI.Services
         private readonly IMapper _mapper;
 
         public EmployeeService(DepartmentDbContext context, IMapper mapper)
-        {
+        {     
             _context = context;
             _mapper = mapper;
+        
         }
 
         public int Create(int departmentId, AddEmployeeDto dto)
         {
-            var department = GetDepartmentById(departmentId);
-
             var employee = _mapper.Map<Employee>(dto);
-
             employee.DepartmentId = departmentId;
 
             _context.Employees.Add(employee);
@@ -50,9 +48,10 @@ namespace DispositionSystemAPI.Services
 
         public EmployeeDto GetById(int departmentId, int employeeId)
         {
-            var department = GetDepartmentById(departmentId);
-
-            var employee = _context.Employees.FirstOrDefault(e => e.Id == employeeId);
+           
+            var employee = _context.Employees
+                .Include(d => d.Address)
+                .FirstOrDefault(e => e.Id == employeeId);
 
             if(employee is null || employee.DepartmentId != departmentId)
                 throw new NotFoundException("Employee not found");
@@ -63,10 +62,14 @@ namespace DispositionSystemAPI.Services
         }
 
         public List<EmployeeDto> GetAll(int departmentId)
-        {
-            var department = GetDepartmentById(departmentId);
+        {         
 
-            var employeeDtos = _mapper.Map<List<EmployeeDto>>(department.Employees);
+            var employees = _context
+                .Employees
+                .Include(a => a.Address)
+                .ToList();
+                
+            var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
             return employeeDtos;
         }
 
@@ -92,11 +95,10 @@ namespace DispositionSystemAPI.Services
             
         }
 
-
         private Department GetDepartmentById(int departmentId)
         {
             var department = _context
-                .Departments
+                .Departments       
                 .Include(d => d.Employees)
                 .FirstOrDefault(r => r.Id == departmentId);
 
@@ -105,5 +107,6 @@ namespace DispositionSystemAPI.Services
 
             return department;
         }
+
     }
 }
