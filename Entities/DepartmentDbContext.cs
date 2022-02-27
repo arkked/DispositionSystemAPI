@@ -8,7 +8,7 @@ namespace DispositionSystemAPI.Entities
 {
     public class DepartmentDbContext : DbContext
     {
-        private string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=DepartmentDb;Trusted_Connection=True;";
+        private readonly string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=DepartmentDb;Trusted_Connection=True;";
 
         public DbSet<Department> Departments { get; set; }
 
@@ -48,16 +48,11 @@ namespace DispositionSystemAPI.Entities
                 .Property(a => a.City)
                 .IsRequired()
                 .HasMaxLength(50);
-            
+
             modelBuilder.Entity<Address>()
                 .Property(a => a.Street)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            modelBuilder.Entity<Employee>()
-                .Property(p => p.AddressId)
-                .IsRequired();
-
             
         }
 

@@ -75,8 +75,11 @@ namespace DispositionSystemAPI.Services
             var department = _dbContext
                    .Departments
                    .Include(d => d.Address)
-                   .Include(d => d.Employees)
+                   .Include(d => d.Employees).ThenInclude(c => c.Address)
                    .FirstOrDefault(d => d.Id == id);
+
+            
+
 
             if (department is null) throw new NotFoundException("Department not found");
 
@@ -91,7 +94,7 @@ namespace DispositionSystemAPI.Services
             var departments = _dbContext
                 .Departments
                 .Include(d => d.Address)
-                .Include(d => d.Employees)
+                .Include(d => d.Employees).ThenInclude(c => c.Address)
                 .ToList();
 
 

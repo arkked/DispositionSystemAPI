@@ -21,6 +21,14 @@ namespace DispositionSystemAPI
 
             if (_dbContext.Database.CanConnect())
             {
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
+
+
                 if (!_dbContext.Departments.Any())
                 {
                     var departments = GetDepartments();
@@ -32,6 +40,27 @@ namespace DispositionSystemAPI
 
         }
 
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+            {
+                new Role()
+                {
+                    Name = "User"
+                },
+                new Role()
+                {
+                    Name = "Manager"
+                },
+                new Role()
+                {
+                    Name = "Admin"
+                }
+            };
+
+            return roles;
+
+        }
         private IEnumerable<Department> GetDepartments() 
         {
             var departments = new List<Department>()
@@ -208,5 +237,6 @@ namespace DispositionSystemAPI
             return departments;
 
         }
+
     }
 }

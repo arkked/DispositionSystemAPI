@@ -24,6 +24,11 @@ namespace DispositionSystemAPI.Middleware
             {
                 await next.Invoke(context);
             }
+            catch (BadRequestException badRequest)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequest.Message);
+            }
             catch(NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
