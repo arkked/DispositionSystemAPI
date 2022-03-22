@@ -51,9 +51,9 @@ namespace DispositionSystemAPI.Controllers
         
         [HttpGet]
         [Authorize(Policy = "AtLeast18")]
-        public ActionResult<IEnumerable<DepartmentDto>> GetAll() 
+        public ActionResult<IEnumerable<DepartmentDto>> GetAll([FromQuery]DepartmentQuery query) 
         {
-            var departmentsDtos = _departmentService.GetAll();
+            var departmentsDtos = _departmentService.GetAll(query);
             return Ok(departmentsDtos);
         }
 

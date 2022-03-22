@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace DispositionSystemAPI.Services
     public interface IDepartmentService
     {
         DepartmentDto GetById(int id);
-        IEnumerable<DepartmentDto> GetAll();
+        PagedResult<DepartmentDto> GetAll(DepartmentQuery query);
         int Create(CreateDepartmentDto dto);
         void Delete(int id);
         void Update(int id, UpdateDepartmentDto dto);
@@ -112,18 +113,46 @@ namespace DispositionSystemAPI.Services
         }
 
 
-        public IEnumerable<DepartmentDto> GetAll()
+        public PagedResult<DepartmentDto> GetAll(DepartmentQuery query)
         {
-            var departments = _dbContext
+
+            var baseQuery = _dbContext
                 .Departments
                 .Include(d => d.Address)
                 .Include(d => d.Employees).ThenInclude(c => c.Address)
+                .Where(d => query.SearchPhrase == null || (d.Name.ToLower().Contains(query.SearchPhrase.ToLower())
+                || d.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+
+                var columnsSelectors = new Dictionary<string, Expression<Func<Department, object>>>
+                {
+                    { nameof(Department.Name), d => d.Name },
+                    { nameof(Department.Description), d => d.Description },
+                    { nameof(Department.Category), d => d.Category },
+                };
+
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+                baseQuery = query.SortDirection == SortDirection.ASC 
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
+
+
+            var departments = baseQuery
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToList();
 
+            var totalItemsCount = baseQuery.Count();
 
             var departmentsDtos = _mapper.Map<List<DepartmentDto>>(departments);
 
-            return departmentsDtos;
+            var result = new PagedResult<DepartmentDto>(departmentsDtos, totalItemsCount, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         //mapowanie z dto na obiekt klasy
