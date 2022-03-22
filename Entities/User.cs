@@ -19,6 +19,8 @@ namespace DispositionSystemAPI.Entities
 
         public string Nationality { get; set; }
 
+        public string Province { get; set; }
+
         public string PasswordHash { get; set; }
 
         public int RoleId { get; set; }

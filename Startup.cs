@@ -21,6 +21,8 @@ using DispositionSystemAPI.Models.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DispositionSystemAPI.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DispositionSystemAPI
 {
@@ -58,6 +60,15 @@ namespace DispositionSystemAPI
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AtLeast18", builder => builder.AddRequirements(new MinimumAgeRequirement(18)));
+
+            });
+
+            
+            services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>(); // do kolekcji serwisów dla typu IAUthorizationHandler rejestrujemy klasê MinimumAgeRequirementHandler()
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddControllers().AddFluentValidation();
             services.AddDbContext<DepartmentDbContext>();
             services.AddScoped<DepartmentSeeder>();
@@ -68,9 +79,11 @@ namespace DispositionSystemAPI
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-            services.AddSwaggerGen();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            
+            services.AddScoped<IUserContextService, UserContextService>();
+            services.AddHttpContextAccessor();
+            services.AddSwaggerGen();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,7 +110,8 @@ namespace DispositionSystemAPI
                 
             );
 
-            app.UseRouting();        
+            app.UseRouting();   
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

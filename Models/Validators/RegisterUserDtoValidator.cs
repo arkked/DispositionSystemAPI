@@ -26,6 +26,12 @@ namespace DispositionSystemAPI.Models.Validators
                         context.AddFailure("Email", "That email is taken");
                     }
                 });
+
+            RuleFor(x => x.Province)
+                .NotEmpty();
+
+            RuleFor(x => x.DateOfBirth)
+                .NotEmpty();
         }
     }
 }
