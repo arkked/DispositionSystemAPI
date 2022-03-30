@@ -84,6 +84,15 @@ namespace DispositionSystemAPI
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
             services.AddSwaggerGen();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("FrontEndClient", builder =>
+
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins(Configuration["AllowedOrigins"])
+                    );
+            });
 
         }
 
@@ -91,6 +100,9 @@ namespace DispositionSystemAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DepartmentSeeder seeder)
         {
 
+            app.UseResponseCaching();
+            app.UseStaticFiles();   //serwowanie plików na serwerze
+            app.UseCors("FrontEndClient");
             seeder.Seed();
           
             if (env.IsDevelopment())
