@@ -12,7 +12,9 @@ namespace DispositionSystemAPI.Entities
 
         public DbSet<Department> Departments { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
+        public DbSet<DepartmentAddress> DepartmentAddresses { get; set; }
+
+        public DbSet<EmployeeAddress> EmployeeAddresses { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
 
@@ -44,16 +46,26 @@ namespace DispositionSystemAPI.Entities
                 .Property(e => e.LastName)
                 .IsRequired();
 
-            modelBuilder.Entity<Address>()
+            modelBuilder.Entity<DepartmentAddress>()
                 .Property(a => a.City)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<Address>()
+            modelBuilder.Entity<DepartmentAddress>()
                 .Property(a => a.Street)
                 .IsRequired()
                 .HasMaxLength(50);
-            
+
+            modelBuilder.Entity<EmployeeAddress>()
+               .Property(a => a.City)
+               .IsRequired()
+               .HasMaxLength(50);
+
+            modelBuilder.Entity<EmployeeAddress>()
+                .Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

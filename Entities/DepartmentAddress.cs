@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DispositionSystemAPI.Entities
 {
-    public class Address
+    public class DepartmentAddress
     {
         public int Id { get; set; }
         
@@ -17,7 +17,7 @@ namespace DispositionSystemAPI.Entities
         
         public virtual Department Department { get; set; }
 
-        public virtual Employee Employee { get; set; }
+       
 
     }
 }

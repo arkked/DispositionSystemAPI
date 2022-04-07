@@ -57,7 +57,7 @@ namespace DispositionSystemAPI.Services
 
             if (!authorizationResult.Succeeded)
             {
-                throw new ForbidException();
+                throw new ForbidException("Authorization failed");
             }
 
             _logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
@@ -86,7 +86,7 @@ namespace DispositionSystemAPI.Services
 
             if (!authorizationResult.Succeeded)
             {
-                throw new ForbidException();
+                throw new ForbidException("Authorization failed");
             }
 
 

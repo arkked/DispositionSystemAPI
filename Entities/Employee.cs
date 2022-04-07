@@ -17,10 +17,10 @@ namespace DispositionSystemAPI.Entities
 
         public int DepartmentId { get; set; }
 
-        public int? AddressId { get; set; }
+        public int AddressId { get; set; }
 
-        //[ForeignKey("AddressId")]
-        public virtual Address Address { get; set; }
+        [ForeignKey("AddressId")]
+        public virtual EmployeeAddress Address { get; set; }
 
         public virtual Department Department { get; set; }
 

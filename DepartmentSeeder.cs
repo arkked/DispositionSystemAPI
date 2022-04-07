@@ -78,7 +78,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Jan",
                             LastName = "Kowalski",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
@@ -90,7 +90,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Adam",
                             LastName = "Nowak",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
@@ -103,7 +103,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Michał",
                             LastName = "Kołodziej",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
@@ -112,7 +112,7 @@ namespace DispositionSystemAPI
                         }
                     },
 
-                    Address = new Address()
+                    Address = new DepartmentAddress()
                     {
                         City = "Lubliniec",
                         Street = "Kościuszki 31",
@@ -133,7 +133,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Zbigniew",
                             LastName = "Maruszczyk",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
                                 PostalCode = "42-600",
@@ -145,7 +145,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Łucjan",
                             LastName = "Szpak",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
                                 PostalCode = "42-600",
@@ -158,7 +158,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Kamil",
                             LastName = "Polak",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
                                 PostalCode = "42-600",
@@ -167,7 +167,7 @@ namespace DispositionSystemAPI
                         }
                     },
 
-                    Address = new Address()
+                    Address = new DepartmentAddress()
                     {
                         City = "Tarnowskie Góry",
                         Street = "Kościuszki 31",
@@ -188,7 +188,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Łukasz",
                             LastName = "Brzoza",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
                                 PostalCode = "42‑226",
@@ -200,7 +200,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Karol",
                             LastName = "Przybysz",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
                                 PostalCode = "42‑226",
@@ -213,7 +213,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Jan",
                             LastName = "Niemiec",
-                            Address = new Address()
+                            Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
                                 PostalCode = "42‑226",
@@ -222,7 +222,7 @@ namespace DispositionSystemAPI
                         }
                     },
 
-                    Address = new Address()
+                    Address = new DepartmentAddress()
                     {
                         City = "Częstochowa",
                         Street = "Główna 51",

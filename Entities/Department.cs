@@ -25,7 +25,7 @@ namespace DispositionSystemAPI.Entities
 
         public int AddressId { get; set; }
 
-        public virtual Address Address { get; set; }
+        public virtual DepartmentAddress Address { get; set; }
 
         public virtual List<Employee> Employees { get; set; }
 

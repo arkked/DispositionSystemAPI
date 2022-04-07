@@ -27,6 +27,7 @@ namespace DispositionSystemAPI.Middleware
             catch (ForbidException forbidException)
             {
                 context.Response.StatusCode = 403;
+                await context.Response.WriteAsync(forbidException.Message);
             }
             catch (BadRequestException badRequest)
             {
@@ -43,7 +44,7 @@ namespace DispositionSystemAPI.Middleware
                 _logger.LogError(e, e.Message);
 
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync("Soething went wrong");
+                await context.Response.WriteAsync("Something went wrong");
             }
 
         }

@@ -21,7 +21,7 @@ namespace DispositionSystemAPI
             //mapping from dto to class object
             CreateMap<CreateDepartmentDto, Department>()
               .ForMember(d => d.Address,
-              c => c.MapFrom(dto => new Address()
+              c => c.MapFrom(dto => new DepartmentAddress()
               { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
 
 
@@ -34,7 +34,7 @@ namespace DispositionSystemAPI
 
             //mapping from dto to object
             CreateMap<AddEmployeeDto, Employee>()
-                .ForMember(d => d.Address, c => c.MapFrom(dto => new Address
+                .ForMember(d => d.Address, c => c.MapFrom(dto => new EmployeeAddress
                 { Street = dto.Street, City = dto.City, PostalCode = dto.PostalCode }));
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         }
