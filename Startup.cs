@@ -23,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DispositionSystemAPI.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace DispositionSystemAPI
 {
@@ -41,7 +42,14 @@ namespace DispositionSystemAPI
             var authenticationSettings = new AuthenticationSettings();
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
+            services.AddControllersWithViews();
             services.AddSingleton(authenticationSettings);
+
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
 
             services.AddAuthentication(option =>
             {
@@ -102,6 +110,7 @@ namespace DispositionSystemAPI
 
             app.UseResponseCaching();
             app.UseStaticFiles();   //serwowanie plików na serwerze
+            app.UseSpaStaticFiles();
             app.UseCors("FrontEndClient");
             seeder.Seed();
           
@@ -128,6 +137,16 @@ namespace DispositionSystemAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }
