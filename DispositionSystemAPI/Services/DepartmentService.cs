@@ -52,18 +52,32 @@ namespace DispositionSystemAPI.Services
 
             if (department is null) throw new NotFoundException("Department not found");
 
-            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
-                new ResourceOperationRequirement(ResourceOperation.Update)).Result;
+            //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
+            //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
-            if (!authorizationResult.Succeeded)
-            {
-                throw new ForbidException("Authorization failed");
-            }
+            //if (!authorizationResult.Succeeded)
+            //{
+            //    throw new ForbidException("Authorization failed");
+            //}
 
             _logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
 
+            
+
             department.Name = dto.Name;
             department.Description = dto.Description;
+            department.Category = dto.Category;
+            department.ContactEmail = dto.ContactEmail;
+            department.ContactNumber = dto.ContactNumber;
+            
+            department = _mapper.Map<Department>(dto);
+
+          
+
+            //department.Address.City = dto.City;
+            //department.Address.Street = dto.Street;
+            //department.Address.PostalCode = dto.PostalCode;
+
             _dbContext.SaveChanges();
 
         }
@@ -81,13 +95,13 @@ namespace DispositionSystemAPI.Services
 
             if (department is null) throw new NotFoundException("Department not found");
 
-            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
-            new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
+            //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
+            //new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
-            if (!authorizationResult.Succeeded)
-            {
-                throw new ForbidException("Authorization failed");
-            }
+            //if (!authorizationResult.Succeeded)
+            //{
+            //    throw new ForbidException("Authorization failed");
+            //}
 
 
 
@@ -161,7 +175,7 @@ namespace DispositionSystemAPI.Services
         public int Create(CreateDepartmentDto dto)
         {
             var department = _mapper.Map<Department>(dto);
-            department.CreatedById = _userContextService.GetUserId;
+            //department.CreatedById = _userContextService.GetUserId;
             _dbContext.Departments.Add(department);
             _dbContext.SaveChanges();
 

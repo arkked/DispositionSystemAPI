@@ -7,7 +7,7 @@ data-backdrop="static" data-keyboard="false">
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">{{ModalTitle}}</h5>
@@ -48,8 +48,11 @@ data-backdrop="static" data-keyboard="false">
       <td>{{item.postalCode}}</td>
       <!-- <td>{{item.employees}}</td> -->
       <td>
-        <button type="button" class="btn btn-light mr-1">Edit</button>
-        <button type="button" class="btn btn-light mr-1">Delete</button>
+        <button type="button" class="btn btn-light mr-1"
+        data-bs-toggle="modal" data-bs-target="#exampleModal"
+        (click)="editClick(item)" data-backdrop="static" data-keyboard="false">Edit</button>
+        <button type="button" class="btn btn-light mr-1"
+        (click)="deleteClick(item)" data-backdrop="static" data-keyboard="false">Delete</button>
       </td>
     </tr>
   </tbody>

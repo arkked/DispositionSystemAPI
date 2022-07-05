@@ -25,6 +25,11 @@ namespace DispositionSystemAPI
               { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
 
 
+            CreateMap<UpdateDepartmentDto, Department>()
+              .ForMember(d => d.Address,
+              c => c.MapFrom(dto => new DepartmentAddress()
+              { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+
             //mapping from object to dto -NULL ????
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(m => m.City, c => c.MapFrom(s => s.Address.City))

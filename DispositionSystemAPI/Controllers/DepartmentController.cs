@@ -41,10 +41,10 @@ namespace DispositionSystemAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Manager")]
+        //[Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateDepartment([FromBody]CreateDepartmentDto dto)
         {
-            var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+           // var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var id = _departmentService.Create(dto);
             return Created($"/api/department/{id}", null);
         }

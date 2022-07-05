@@ -19,7 +19,7 @@ export class DepartmentApiService {
   //Departments
 
   getDepartmentsList() {
-    return this.http.get(this.departmentAPIUrl + "/department?pageSize=5&pageNumber=1"); // OK
+    return this.http.get(this.departmentAPIUrl + "/department?pageSize=10&pageNumber=1"); // OK
 
   }
 
