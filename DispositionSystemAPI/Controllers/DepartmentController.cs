@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DispositionSystemAPI.Entities;
 using DispositionSystemAPI.Models;
+using DispositionSystemAPI.Repository;
 using DispositionSystemAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,47 +21,47 @@ namespace DispositionSystemAPI.Controllers
     public class DepartmentController : ControllerBase
     {
 
-        private readonly IDepartmentService _departmentService;
-        public DepartmentController(IDepartmentService departmentService)
+        private readonly IDepartmentRepository departmentRepository;
+        public DepartmentController(IDepartmentRepository departmentRepository)
         {
-            _departmentService = departmentService;
+            this.departmentRepository = departmentRepository;
         }
 
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateDepartmentDto dto, [FromRoute] int id)
         {
-            _departmentService.Update(id, dto);
+            this.departmentRepository.Update(id, dto);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id) 
         {
-            _departmentService.Delete(id);
+            this.departmentRepository.Delete(id);
             return NoContent();
         }
 
         [HttpPost]
         //[Authorize(Roles = "Admin,Manager")]
-        public ActionResult CreateDepartment([FromBody]CreateDepartmentDto dto)
+        public async Task<ActionResult> CreateDepartment([FromBody]CreateDepartmentDto dto)
         {
            // var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var id = _departmentService.Create(dto);
+            var id = await this.departmentRepository.Create(dto);
             return Created($"/api/department/{id}", null);
         }
         
         [HttpGet]
         //[Authorize(Policy = "AtLeast18")]
-        public ActionResult<IEnumerable<DepartmentDto>> GetAll([FromQuery]DepartmentQuery query) 
+        public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll([FromQuery]DepartmentQuery query) 
         {
-            var departmentsDtos = _departmentService.GetAll(query);
+            var departmentsDtos = await this.departmentRepository.GetAll(query);
             return Ok(departmentsDtos);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<DepartmentDto> Get([FromRoute]int id) 
+        public async Task<ActionResult<DepartmentDto>> Get([FromRoute]int id) 
         {
-            var department = _departmentService.GetById(id);
+            var department = await this.departmentRepository.GetById(id);
             return Ok(department);
         }
     }

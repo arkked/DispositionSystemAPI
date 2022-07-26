@@ -23,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DispositionSystemAPI.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using DispositionSystemAPI.Repository;
 
 namespace DispositionSystemAPI
 {
@@ -76,8 +77,8 @@ namespace DispositionSystemAPI
             services.AddDbContext<DepartmentDbContext>();
             services.AddScoped<DepartmentSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
-            services.AddScoped<IDepartmentService, DepartmentService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();

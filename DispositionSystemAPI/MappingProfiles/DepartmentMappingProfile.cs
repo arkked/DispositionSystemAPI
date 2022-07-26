@@ -22,13 +22,13 @@ namespace DispositionSystemAPI
             CreateMap<CreateDepartmentDto, Department>()
               .ForMember(d => d.Address,
               c => c.MapFrom(dto => new DepartmentAddress()
-              { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+              {City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
 
 
-            CreateMap<UpdateDepartmentDto, Department>()
-              .ForMember(d => d.Address,
-              c => c.MapFrom(dto => new DepartmentAddress()
-              { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+            CreateMap<UpdateDepartmentDto, DepartmentAddress>()
+              .ForMember(d => d.City, c => c.MapFrom(dto => dto.City))
+              .ForMember(d => d.PostalCode, c => c.MapFrom(dto => dto.PostalCode))
+              .ForMember(d => d.Street, c => c.MapFrom(dto => dto.Street));
 
             //mapping from object to dto -NULL ????
             CreateMap<Employee, EmployeeDto>()

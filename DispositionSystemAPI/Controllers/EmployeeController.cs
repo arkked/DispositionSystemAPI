@@ -1,4 +1,5 @@
 ﻿using DispositionSystemAPI.Models;
+using DispositionSystemAPI.Repository;
 using DispositionSystemAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,17 +14,17 @@ namespace DispositionSystemAPI.Controllers
 
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeRepository employeeRepository;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeRepository employeeRepository)
         {
-            _employeeService = employeeService;
+            this.employeeRepository = employeeRepository;
         }
 
         [HttpPost]
         public ActionResult Post([FromRoute]int departmentId, [FromBody] AddEmployeeDto dto) 
         {
-            var newEmpoyeeId = _employeeService.Create(departmentId, dto);
+            var newEmpoyeeId = this.employeeRepository.Create(departmentId, dto);
 
             return Created($"api/department/{departmentId}/employee/{newEmpoyeeId}", null);
 
@@ -33,28 +34,28 @@ namespace DispositionSystemAPI.Controllers
         [HttpGet("{employeeId}")]
         public ActionResult<EmployeeDto> Get([FromRoute]int departmentId, [FromRoute]int employeeId)
         {
-            EmployeeDto employee = _employeeService.GetById(departmentId, employeeId);
+            EmployeeDto employee = this.employeeRepository.GetById(departmentId, employeeId);
             return Ok(employee);
         }
 
         [HttpGet]
         public ActionResult<List<EmployeeDto>> Get([FromRoute] int departmentId)
         {
-            var result = _employeeService.GetAll(departmentId);
+            var result = this.employeeRepository.GetAll(departmentId);
             return Ok(result);
         }
 
         [HttpDelete]
         public ActionResult Delete([FromRoute] int departmentId)
         {
-            _employeeService.RemoveAll(departmentId);
+            this.employeeRepository.RemoveAll(departmentId);
             return NoContent();
         }
 
         [HttpDelete("{employeeId}")]
         public ActionResult Delete([FromRoute] int departmentId, [FromRoute]int employeeId)
         {
-            _employeeService.Remove(departmentId, employeeId);
+            this.employeeRepository.Remove(departmentId, employeeId);
             return NoContent();
         }
 
