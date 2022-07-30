@@ -73,48 +73,18 @@ namespace DispositionSystemAPI.Repository
            
         }
 
-        public async Task<PagedResult<DepartmentDto>> GetAll(DepartmentQuery query)
+        public async Task<List<DepartmentDto>> GetAll()
         {
-            //IOrderedQueryable<Department> direction;
-            //PagedResult<DepartmentDto> result;
-
-            var baseQuery = this.context
+            var departments = await this.context
                 .Departments
                 .Include(d => d.Address)
-                .Include(d => d.Employees).ThenInclude(c => c.Address)
-                .Where(d => query.SearchPhrase == null || (d.Name.ToLower().Contains(query.SearchPhrase.ToLower())
-                || d.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
-
-            if (!string.IsNullOrEmpty(query.SortBy))
-            {
-
-                var columnsSelectors = new Dictionary<string, Expression<Func<Department, object>>>
-                {
-                    { nameof(Department.Name), d => d.Name },
-                    { nameof(Department.Description), d => d.Description },
-                    { nameof(Department.Category), d => d.Category },
-                };
-
-                var selectedColumn = columnsSelectors[query.SortBy];
-
-                baseQuery = (query.SortDirection == SortDirection.ASC
-                    ? baseQuery.OrderBy(selectedColumn)
-                    : baseQuery.OrderByDescending(selectedColumn));
-             
-            }
-
-            var departments = baseQuery
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .ToList();
-
-            var totalItemsCount = departments.Count;
+                .Include(d => d.Employees)
+                .ThenInclude(c => c.Address)
+                .ToListAsync();
 
             var departmentsDtos = this.mapper.Map<List<DepartmentDto>>(departments);
 
-            var result = new PagedResult<DepartmentDto>(departmentsDtos, totalItemsCount, query.PageSize, query.PageNumber);
-
-            return result;
+            return departmentsDtos;
         }
 
         public async Task<DepartmentDto> GetById(int id)

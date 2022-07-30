@@ -83,7 +83,6 @@ namespace DispositionSystemAPI
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-            services.AddScoped<IValidator<DepartmentQuery>, DepartmentQueryValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();

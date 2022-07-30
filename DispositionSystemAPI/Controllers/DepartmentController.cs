@@ -52,9 +52,9 @@ namespace DispositionSystemAPI.Controllers
         
         [HttpGet]
         //[Authorize(Policy = "AtLeast18")]
-        public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll([FromQuery]DepartmentQuery query) 
+        public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll() 
         {
-            var departmentsDtos = await this.departmentRepository.GetAll(query);
+            var departmentsDtos = await this.departmentRepository.GetAll();
             return Ok(departmentsDtos);
         }
 
