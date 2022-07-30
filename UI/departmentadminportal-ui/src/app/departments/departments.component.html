@@ -5,18 +5,27 @@
 </div>
 
 <div class="container">
-  <div>
+  <div class="row end-xs mt-1">
+    <div class="col-xs-12">
+      <input type="text" class="search-input" placeholder="Search departments"
+      [(ngModel)]="filterString"
+        (keyup)="filterDepartments()"
+      >
+    </div>
+  </div>
+  <div class="mt-1 mat-elevation-z8">
     <table
       mat-table
       [dataSource]="dataSource"
       multiTemplateDataRows
-      class="mat-elevation-z8"
+      matSort
+      class=""
     >
       <ng-container
         matColumnDef="{{ column }}"
         *ngFor="let column of columnsToDisplay"
       >
-        <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
         <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
       </ng-container>
       <ng-container matColumnDef="expand">
@@ -55,7 +64,6 @@
               element == expandedElement ? 'expanded' : 'collapsed'
             "
           >
-
             <table class="employee-table">
                 <thead>
                   <th>Id</th>
@@ -76,19 +84,6 @@
                 </tr>
                 </tbody>
             </table>
-
-            <!-- <div class="example-element-diagram">
-              <div class="example-element-position">{{ element.position }}</div>
-              <div class="example-element-symbol">{{ element.symbol }}</div>
-              <div class="example-element-name">{{ element.name }}</div>
-              <div class="example-element-weight">{{ element.weight }}</div>
-            </div> -->
-            <!-- <div class="example-element-description">
-              {{ element.name }}
-              <span class="example-element-description-attribution">
-                -- Wikipedia
-              </span>
-            </div> -->
           </div>
         </td>
       </ng-container>
@@ -107,5 +102,10 @@
         class="example-detail-row"
       ></tr>
     </table>
+    <mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 15]"
+              aria-label="Select page">
+</mat-paginator>
   </div>
 </div>

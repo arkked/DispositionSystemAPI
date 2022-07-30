@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Department } from '../models/ui-models/department.model';
 import { DepartmentService } from './department.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Employee } from '../models/ui-models/employee.model';
 import { ConditionalExpr } from '@angular/compiler';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-departments',
@@ -26,6 +28,9 @@ export class DepartmentsComponent implements OnInit {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: Department | null;
 
+  @ViewChild(MatPaginator) matPaginator!: MatPaginator;
+  @ViewChild(MatSort) matSort!: MatSort;
+  filterString = '';
 
   dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>();
 
@@ -37,11 +42,16 @@ export class DepartmentsComponent implements OnInit {
     this.departmentService.getAllDepartments()
       .subscribe(
         (successResponse) => {
-          this.departments = successResponse.items;
+          this.departments = successResponse;
           this.dataSource = new MatTableDataSource<Department>(this.departments);
-          console.log("dupa");
-          console.log(this.dataSource);
-          console.log(this.departments);
+
+          if (this.matPaginator) {
+            this.dataSource.paginator = this.matPaginator;
+          }
+
+          if (this.matSort) {
+            this.dataSource.sort = this.matSort;
+          }
       },
       (errorResponse) => {
         console.log(errorResponse);
@@ -50,8 +60,8 @@ export class DepartmentsComponent implements OnInit {
       );
   }
 
-  toggleRow(element: { expanded: boolean; }){
-    element.expanded = !element.expanded;
+  filterDepartments(){
+    this.dataSource.filter = this.filterString.trim().toLowerCase();
   }
 
 
