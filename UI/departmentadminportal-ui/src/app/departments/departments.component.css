@@ -50,6 +50,9 @@ tr.example-element-row:not(.example-expanded-row):active {
   padding-left: 4em;
 }
 
+.inner-table {
+  width: 100%;
+}
 
 
 .search-input {

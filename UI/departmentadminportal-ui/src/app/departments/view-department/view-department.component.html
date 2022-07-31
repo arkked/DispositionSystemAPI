@@ -20,13 +20,39 @@
         <div class="row">
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input type="text" matInput>
+            <input type="text" matInput [(ngModel)]="department.name" name="name">
           </mat-form-field>
         </div>
         <div class="row">
           <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
-            <input type="text" matInput>
+            <textarea matInput [(ngModel)]="department.description" name="description"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <input type="text" matInput [(ngModel)]="department.category" name="category">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Street</mat-label>
+              <input type="text" matInput [(ngModel)]="department.street" name="street">
+            </mat-form-field>
+          </div>
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Postal Code</mat-label>
+              <input type="text" matInput [(ngModel)]="department.postalCode" name="postalCode">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input type="text" matInput [(ngModel)]="department.city" name="city">
           </mat-form-field>
         </div>
       </form>

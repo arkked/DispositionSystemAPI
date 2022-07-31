@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Department } from 'src/app/models/ui-models/department.model';
 import { DepartmentService } from '../department.service';
 
 @Component({
@@ -10,6 +11,16 @@ import { DepartmentService } from '../department.service';
 export class ViewDepartmentComponent implements OnInit {
 
   departmentId: number | null | undefined;
+  department: Department = {
+    id: 0,
+    name: '',
+    description: '',
+    category: '',
+    city: '',
+    street: '',
+    postalCode: '',
+    imageUrl: ''
+  }
 
   constructor(private readonly departmentService: DepartmentService,
               private readonly route: ActivatedRoute) { }
@@ -23,7 +34,7 @@ export class ViewDepartmentComponent implements OnInit {
             this.departmentService.getDepartmentById(this.departmentId)
               .subscribe(
                 (successResponse) => {
-                  console.log(successResponse);
+                  this.department = successResponse;
                 }
               );
           }

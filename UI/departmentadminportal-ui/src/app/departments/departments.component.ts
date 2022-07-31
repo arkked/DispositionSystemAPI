@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Department } from '../models/ui-models/department.model';
 import { DepartmentService } from './department.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Employee } from '../models/ui-models/employee.model';
-import { ConditionalExpr } from '@angular/compiler';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+
 
 @Component({
   selector: 'app-departments',
@@ -23,18 +23,25 @@ import { MatSort } from '@angular/material/sort';
 
 export class DepartmentsComponent implements OnInit {
 
+  @ViewChild(MatPaginator) matPaginator!: MatPaginator;
+  @ViewChild('outerSort', {static: true}) sort!: MatSort;
+  @ViewChildren('innerSort') innerSort!: QueryList<MatSort>;
+  @ViewChildren('innerTables') innerTables!: QueryList<MatTable<Employee>>;
+
+  dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>([]);
   departments: Department[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode'];
+  innerDisplayedColumns = ['id', 'firstName', 'lastName', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
+  innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
   expandedElement: Department | null;
 
-  @ViewChild(MatPaginator) matPaginator!: MatPaginator;
-  @ViewChild(MatSort) matSort!: MatSort;
+
   filterString = '';
 
-  dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>();
 
-  constructor(private departmentService: DepartmentService) {
+
+  constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef) {
       this.expandedElement = null;
    }
 
@@ -42,22 +49,35 @@ export class DepartmentsComponent implements OnInit {
     this.departmentService.getAllDepartments()
       .subscribe(
         (successResponse) => {
-          this.departments = successResponse;
-          this.dataSource = new MatTableDataSource<Department>(this.departments);
+          console.log(successResponse);
 
-          if (this.matPaginator) {
-            this.dataSource.paginator = this.matPaginator;
-          }
+          // this.departments = successResponse;
 
-          if (this.matSort) {
-            this.dataSource.sort = this.matSort;
-          }
+            successResponse.forEach(department => {
+            if (department.employees && Array.isArray(department.employees) && department.employees.length) {
+              this.departments = [...this.departments, {...department, employees: new MatTableDataSource(department.employees)}];
+            }
+            else {
+              this.departments = [...this.departments, department];
+            }
+           });
+
+           this.dataSource = new MatTableDataSource(this.departments);
+           this.dataSource.sort = this.sort;
       },
       (errorResponse) => {
         console.log(errorResponse);
-
       }
       );
+  }
+
+  toggleRow(element: Department) {
+    element.employees && (element.employees as MatTableDataSource<Employee>).data.length ?
+    (this.expandedElement = this.expandedElement === element ? null : element) : null;
+
+    this.cd.detectChanges();
+
+    this.innerTables.forEach((table, index) => (table.dataSource as MatTableDataSource<Employee>).sort = this.innerSort.toArray()[index]);
   }
 
   filterDepartments(){

@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'departments/:id',
     component: ViewDepartmentComponent
+  },
+  {
+    path: 'departments/:id/employees/:employeeId',
+    component: ViewDepartmentComponent
   }
 ];
 
