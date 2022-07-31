@@ -22,9 +22,9 @@ namespace DispositionSystemAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromRoute]int departmentId, [FromBody] AddEmployeeDto dto) 
+        public async Task<ActionResult> Post([FromRoute]int departmentId, [FromBody] AddEmployeeDto dto) 
         {
-            var newEmpoyeeId = this.employeeRepository.Create(departmentId, dto);
+            var newEmpoyeeId = await this.employeeRepository.Create(departmentId, dto);
 
             return Created($"api/department/{departmentId}/employee/{newEmpoyeeId}", null);
 
@@ -32,38 +32,38 @@ namespace DispositionSystemAPI.Controllers
         }
 
         [HttpPut("{employeeId}")]
-        public ActionResult Update([FromBody] UpdateEmployeeDto dto, [FromRoute] int departmentId, [FromRoute] int employeeId)
+        public async Task<ActionResult> Update([FromBody] UpdateEmployeeDto dto, [FromRoute] int departmentId, [FromRoute] int employeeId)
         {
-            this.employeeRepository.Update(departmentId, employeeId, dto);
+            await this.employeeRepository.Update(departmentId, employeeId, dto);
             return Ok();
         }
 
 
         [HttpGet("{employeeId}")]
-        public ActionResult<EmployeeDto> Get([FromRoute]int departmentId, [FromRoute]int employeeId)
+        public async Task<ActionResult<EmployeeDto>> Get([FromRoute]int departmentId, [FromRoute]int employeeId)
         {
-            Task<EmployeeDto> employee = this.employeeRepository.GetById(departmentId, employeeId);
-            return Ok(employee.Result);
+            EmployeeDto employee = await this.employeeRepository.GetById(departmentId, employeeId);
+            return Ok(employee);
         }
 
         [HttpGet]
-        public ActionResult<List<EmployeeDto>> Get([FromRoute] int departmentId)
+        public async Task<ActionResult<List<EmployeeDto>>> Get([FromRoute] int departmentId)
         {
-            var result = this.employeeRepository.GetAll(departmentId);
+            var result = await this.employeeRepository.GetAll(departmentId);
             return Ok(result);
         }
 
         [HttpDelete]
-        public ActionResult Delete([FromRoute] int departmentId)
+        public async Task<ActionResult> Delete([FromRoute] int departmentId)
         {
-            this.employeeRepository.RemoveAll(departmentId);
+            await this.employeeRepository.RemoveAll(departmentId);
             return NoContent();
         }
 
         [HttpDelete("{employeeId}")]
-        public ActionResult Delete([FromRoute] int departmentId, [FromRoute]int employeeId)
+        public async Task<ActionResult> Delete([FromRoute] int departmentId, [FromRoute]int employeeId)
         {
-            this.employeeRepository.Remove(departmentId, employeeId);
+            await this.employeeRepository.Remove(departmentId, employeeId);
             return NoContent();
         }
 

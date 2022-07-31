@@ -9,9 +9,9 @@ namespace DispositionSystemAPI.Repository
         Task<EmployeeDto> GetById(int departmentId, int employeeId);
         Task<List<EmployeeDto>> GetAll(int departmentId);
         Task<int> Create(int departmentId, AddEmployeeDto dto);
-        void RemoveAll(int departmentId);
-        void Remove(int departmentId, int employeeId);
-        void Update(int departmentId, int employeeId, UpdateEmployeeDto dto);
+        Task RemoveAll(int departmentId);
+        Task Remove(int departmentId, int employeeId);
+        Task Update(int departmentId, int employeeId, UpdateEmployeeDto dto);
 
 
     }

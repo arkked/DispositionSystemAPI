@@ -28,16 +28,17 @@ namespace DispositionSystemAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromBody] UpdateDepartmentDto dto, [FromRoute] int id)
+        public async Task<ActionResult> Update([FromBody] UpdateDepartmentDto dto, [FromRoute] int id)
         {
-            this.departmentRepository.Update(id, dto);
+            await this.departmentRepository.Update(id, dto);
+
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id) 
+        public async Task<ActionResult> Delete([FromRoute] int id) 
         {
-            this.departmentRepository.Delete(id);
+            await this.departmentRepository.Delete(id);
             return NoContent();
         }
 

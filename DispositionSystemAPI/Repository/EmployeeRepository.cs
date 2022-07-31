@@ -60,12 +60,11 @@ namespace DispositionSystemAPI.Repository
             return employeeDto;
         }
 
-        public void Remove(int departmentId, int employeeId)
+        public async Task Remove(int departmentId, int employeeId)
         {
-            var department = GetDepartmentById(departmentId);
+            var department = await GetDepartmentById(departmentId);
 
             var employee = department
-                .Result
                 .Employees
                 .FirstOrDefault(e => e.Id == employeeId);
 
@@ -73,13 +72,13 @@ namespace DispositionSystemAPI.Repository
             this.context.SaveChanges();
         }
 
-        public void Update(int departmentId, int employeeId, UpdateEmployeeDto dto)
+        public async Task Update(int departmentId, int employeeId, UpdateEmployeeDto dto)
         {
-            var department = GetDepartmentById(departmentId);
+            var department = await GetDepartmentById(departmentId);
 
             if (department == null) throw new NotFoundException("Employee not found.");
 
-            var employee = department.Result.Employees.FirstOrDefault(d => d.Id == employeeId);
+            var employee = department.Employees.FirstOrDefault(d => d.Id == employeeId);
 
             //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
             //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
@@ -97,11 +96,11 @@ namespace DispositionSystemAPI.Repository
             this.context.SaveChanges();
         }
 
-        public void RemoveAll(int departmentId)
+        public async Task RemoveAll(int departmentId)
         {
-            var department = GetDepartmentById(departmentId);
+            var department = await GetDepartmentById(departmentId);
 
-            this.context.RemoveRange(department.Result.Employees);
+            this.context.RemoveRange(department.Employees);
             this.context.SaveChanges();
         }
 
