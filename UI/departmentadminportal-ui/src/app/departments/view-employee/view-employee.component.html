@@ -1,6 +1,6 @@
 <div class="page-header">
   <div class="container">
-    <h1>View Department</h1>
+    <h1>View Employee</h1>
   </div>
 </div>
 
@@ -16,57 +16,40 @@
 
   <div class="row">
     <div class="col-xs-6">
-      <form #departmentDetailsForm="ngForm">
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input type="text" matInput [(ngModel)]="department.name" name="name">
-          </mat-form-field>
-        </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea matInput [(ngModel)]="department.description" name="description"></textarea>
-          </mat-form-field>
-        </div>
+      <form #employeeDetailsForm="ngForm">
         <div class="row">
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
-              <mat-label>Email</mat-label>
-              <input type="text" matInput [(ngModel)]="department.contactEmail" name="email">
+              <mat-label>First Name</mat-label>
+              <input type="text" matInput [(ngModel)]="employee.firstName" name="name">
             </mat-form-field>
           </div>
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
-              <mat-label>Number</mat-label>
-              <input type="text" matInput [(ngModel)]="department.contactNumber" name="number">
+              <mat-label>Last Name</mat-label>
+              <input type="text" matInput [(ngModel)]="employee.lastName" name="description">
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
-          <mat-form-field appearance="outline">
-            <mat-label>Category</mat-label>
-            <input type="text" matInput [(ngModel)]="department.category" name="category">
-          </mat-form-field>
-        </div>
+
         <div class="row">
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Street</mat-label>
-              <input type="text" matInput [(ngModel)]="department.street" name="street">
+              <input type="text" matInput [(ngModel)]="employee.street" name="street">
             </mat-form-field>
           </div>
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Postal Code</mat-label>
-              <input type="text" matInput [(ngModel)]="department.postalCode" name="postalCode">
+              <input type="text" matInput [(ngModel)]="employee.postalCode" name="postalCode">
             </mat-form-field>
           </div>
         </div>
         <div class="row">
           <mat-form-field appearance="outline">
             <mat-label>City</mat-label>
-            <input type="text" matInput [(ngModel)]="department.city" name="city">
+            <input type="text" matInput [(ngModel)]="employee.city" name="city">
           </mat-form-field>
         </div>
         <div class="row">

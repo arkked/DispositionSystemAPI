@@ -68,14 +68,14 @@
               <table #innerTables mat-table #innerSort="matSort" [dataSource]="element.employees" matSort>
 
                 <ng-container matColumnDef="{{innerColumn}}" *ngFor="let innerColumn of innerDisplayedColumns">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{innerColumn}}</th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{innerColumn[0].toUpperCase() + innerColumn.substr(1)}}</th>
                   <td mat-cell *matCellDef="let element"> {{element[innerColumn]}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-                  <td mat-cell *matCellDef="let element">
-                    <a [routerLink]="['/departments', element.id, '/employees']">
+                  <td mat-cell *matCellDef="let employeeElement">
+                    <a [routerLink]="['/departments', element.id, 'employees', employeeElement.id]">
                       <mat-icon color="primary">edit</mat-icon>
                     </a>
                   </td>

@@ -53,6 +53,7 @@ import { TopNavComponent } from './layout/top-nav/top-nav.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ViewDepartmentComponent } from './departments/view-department/view-department.component';
+import { ViewEmployeeComponent } from './departments/view-employee/view-employee.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { ViewDepartmentComponent } from './departments/view-department/view-depa
     AppComponent,
     TopNavComponent,
     DepartmentsComponent,
-    ViewDepartmentComponent
+    ViewDepartmentComponent,
+    ViewEmployeeComponent
   ],
   imports: [
     FormsModule,

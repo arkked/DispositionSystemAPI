@@ -9,6 +9,8 @@ export interface Department {
   city: string,
   street: string,
   postalCode: string,
+  contactEmail: string,
+  contactNumber: string,
   imageUrl: string,
   employees?: Employee[];
 }
