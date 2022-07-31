@@ -17,5 +17,7 @@ export class DepartmentService {
     return this.httpClient.get<Department[]>(this.baseApiUrl + '/department');
   }
 
-
+  getDepartmentById(id: number): Observable<Department> {
+    return this.httpClient.get<Department>(this.baseApiUrl + '/department/' + id);
+  }
 }

@@ -25,9 +25,19 @@
         matColumnDef="{{ column }}"
         *ngFor="let column of columnsToDisplay"
       >
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column[0].toUpperCase() + column.substr(1).toLowerCase() }}</th>
         <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
       </ng-container>
+
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let element">
+          <a [routerLink]="['/departments', element.id]">
+            <mat-icon color="primary">edit</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="expand">
         <th mat-header-cell *matHeaderCellDef aria-label="row actions">
           &nbsp;
@@ -51,6 +61,8 @@
         </td>
       </ng-container>
 
+
+
       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedDetail">
         <td
@@ -72,6 +84,7 @@
                   <th>City</th>
                   <th>Street</th>
                   <th>Postal Code</th>
+                  <th>Edit</th>
                 </thead>
                 <tbody>
                 <tr *ngFor="let item of element.employees">
@@ -81,6 +94,11 @@
                   <td>{{item.city}}</td>
                   <td>{{item.street}}</td>
                   <td>{{item.postalCode}}</td>
+                  <td>
+                    <a [routerLink]="['/departments', element.id, '/employee', item.id]">
+                      <mat-icon color="primary">edit</mat-icon>
+                    </a>
+                  </td>
                 </tr>
                 </tbody>
             </table>
@@ -106,6 +124,6 @@
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 15]"
               aria-label="Select page">
-</mat-paginator>
+    </mat-paginator>
   </div>
 </div>

@@ -52,13 +52,15 @@ import { TopNavComponent } from './layout/top-nav/top-nav.component';
 
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ViewDepartmentComponent } from './departments/view-department/view-department.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TopNavComponent,
-    DepartmentsComponent
+    DepartmentsComponent,
+    ViewDepartmentComponent
   ],
   imports: [
     FormsModule,

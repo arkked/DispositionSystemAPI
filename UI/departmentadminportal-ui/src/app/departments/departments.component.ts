@@ -25,7 +25,7 @@ export class DepartmentsComponent implements OnInit {
 
   departments: Department[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode'];
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
   expandedElement: Department | null;
 
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;

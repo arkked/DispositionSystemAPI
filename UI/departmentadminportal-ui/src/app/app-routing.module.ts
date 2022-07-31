@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DepartmentsComponent } from './departments/departments.component';
+import { ViewDepartmentComponent } from './departments/view-department/view-department.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
     path: "departments",
     component: DepartmentsComponent
   },
+  {
+    path: 'departments/:id',
+    component: ViewDepartmentComponent
+  }
 ];
 
 @NgModule({
