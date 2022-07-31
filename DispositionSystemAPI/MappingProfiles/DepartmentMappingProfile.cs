@@ -30,6 +30,11 @@ namespace DispositionSystemAPI
               .ForMember(d => d.PostalCode, c => c.MapFrom(dto => dto.PostalCode))
               .ForMember(d => d.Street, c => c.MapFrom(dto => dto.Street));
 
+            CreateMap<UpdateEmployeeDto, EmployeeAddress>()
+                .ForMember(d => d.City, c => c.MapFrom(dto => dto.City))
+                .ForMember(d => d.PostalCode, c => c.MapFrom(dto => dto.PostalCode))
+                .ForMember(d => d.Street, c => c.MapFrom(dto => dto.Street));
+
             //mapping from object to dto -NULL ????
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(m => m.City, c => c.MapFrom(s => s.Address.City))

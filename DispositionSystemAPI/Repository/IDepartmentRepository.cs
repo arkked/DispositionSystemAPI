@@ -9,7 +9,7 @@ namespace DispositionSystemAPI.Repository
         Task<DepartmentDto> GetById(int id);
         Task<List<DepartmentDto>> GetAll(/*DepartmentQuery query*/);
         Task<int> Create(CreateDepartmentDto dto);
-        void Delete(int id);
-        void Update(int id, UpdateDepartmentDto dto);
+        Task Delete(int id);
+        Task Update(int id, UpdateDepartmentDto dto);
     }
 }

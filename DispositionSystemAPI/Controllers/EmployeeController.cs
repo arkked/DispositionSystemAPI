@@ -31,11 +31,19 @@ namespace DispositionSystemAPI.Controllers
 
         }
 
+        [HttpPut("{employeeId}")]
+        public ActionResult Update([FromBody] UpdateEmployeeDto dto, [FromRoute] int departmentId, [FromRoute] int employeeId)
+        {
+            this.employeeRepository.Update(departmentId, employeeId, dto);
+            return Ok();
+        }
+
+
         [HttpGet("{employeeId}")]
         public ActionResult<EmployeeDto> Get([FromRoute]int departmentId, [FromRoute]int employeeId)
         {
-            EmployeeDto employee = this.employeeRepository.GetById(departmentId, employeeId);
-            return Ok(employee);
+            Task<EmployeeDto> employee = this.employeeRepository.GetById(departmentId, employeeId);
+            return Ok(employee.Result);
         }
 
         [HttpGet]

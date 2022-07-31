@@ -42,7 +42,7 @@ namespace DispositionSystemAPI.Repository
             return department.Id;
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             this.logger.LogError($"Department with id: {id} DELETE action invoked");
 
@@ -101,7 +101,7 @@ namespace DispositionSystemAPI.Repository
             return result;
         }
 
-        public async void Update(int id, UpdateDepartmentDto dto)
+        public async Task Update(int id, UpdateDepartmentDto dto)
         {
             var department = await this.context.Departments.FirstOrDefaultAsync(d => d.Id == id);
 
@@ -114,9 +114,7 @@ namespace DispositionSystemAPI.Repository
             //{
             //    throw new ForbidException("Authorization failed");
             //}
-
-            this.logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
-
+            //
             department.Name = dto.Name;
             department.Description = dto.Description;
             department.Category = dto.Category;
@@ -125,6 +123,7 @@ namespace DispositionSystemAPI.Repository
 
             department.Address = mapper.Map<DepartmentAddress>(dto);
 
+            this.logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
 
             this.context.SaveChanges();
 
