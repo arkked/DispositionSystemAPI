@@ -36,10 +36,7 @@ export class DepartmentsComponent implements OnInit {
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
   expandedElement: Department | null;
 
-
   filterString = '';
-
-
 
   constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef) {
       this.expandedElement = null;
@@ -49,10 +46,6 @@ export class DepartmentsComponent implements OnInit {
     this.departmentService.getAllDepartments()
       .subscribe(
         (successResponse) => {
-          console.log(successResponse);
-
-          // this.departments = successResponse;
-
             successResponse.forEach(department => {
             if (department.employees && Array.isArray(department.employees) && department.employees.length) {
               this.departments = [...this.departments, {...department, employees: new MatTableDataSource(department.employees)}];
@@ -63,6 +56,11 @@ export class DepartmentsComponent implements OnInit {
            });
 
            this.dataSource = new MatTableDataSource(this.departments);
+
+           if (this.matPaginator) {
+            this.dataSource.paginator = this.matPaginator;
+           }
+
            this.dataSource.sort = this.sort;
       },
       (errorResponse) => {

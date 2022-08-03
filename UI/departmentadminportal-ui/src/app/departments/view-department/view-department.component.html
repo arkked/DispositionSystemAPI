@@ -1,6 +1,6 @@
 <div class="page-header">
   <div class="container">
-    <h1>View Department</h1>
+    <h1>{{header}}</h1>
   </div>
 </div>
 
@@ -71,7 +71,15 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <button mat-raised-button color="primary" (click)="onUpdate()">Save</button>
+            <div class="row between-xs" *ngIf="!isNewDepartment">
+              <button mat-raised-button color="primary" (click)="onUpdate()" >Save</button>
+              <button mat-raised-button color="warn" (click)="onDelete()">Delete</button>
+            </div>
+            <div class="row between-xs" *ngIf="isNewDepartment">
+              <button mat-raised-button color="primary" (click)="onAdd()">Add</button>
+
+            </div>
+
           </div>
         </div>
       </form>

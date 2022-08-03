@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from 'src/app/models/api-models/employee.model';
 import { DepartmentService } from '../department.service';
 
@@ -25,7 +26,9 @@ export class ViewEmployeeComponent implements OnInit {
 
 
   constructor(private readonly departmentService: DepartmentService,
-              private readonly route: ActivatedRoute) { }
+              private readonly route: ActivatedRoute,
+              private snackbar: MatSnackBar,
+              private router: Router) { }
 
   ngOnInit(): void {
 
@@ -52,12 +55,34 @@ export class ViewEmployeeComponent implements OnInit {
     this.departmentService.updateEmployee(this.departmentId, this.employee.id, this.employee)
       .subscribe(
         (successResponse) => {
-          console.log(successResponse);
+          this.snackbar.open('Employee has been updated successfuly', undefined, {
+            duration: 2000
+          });
         },
         (errorResponse) => {
-          console.log(errorResponse);
+          this.snackbar.open('Something went wrong', undefined, {
+            duration: 2000
+          });
         }
       );
+  }
+
+  onDelete(): void {
+    this.departmentService.deleteEmployee(this.departmentId, this.employee.id)
+    .subscribe(
+      (successResponse) => {
+        this.snackbar.open('Employee has been deleted', undefined, {
+          duration: 2000
+        });
+
+        this.router.navigateByUrl('departments');
+      },
+      (errorResponse) => {
+        this.snackbar.open('Something went wrong', undefined, {
+          duration: 2000
+        });
+      }
+    )
   }
 
 }
