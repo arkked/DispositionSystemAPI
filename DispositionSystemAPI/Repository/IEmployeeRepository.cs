@@ -12,7 +12,7 @@ namespace DispositionSystemAPI.Repository
         Task RemoveAll(int departmentId);
         Task Remove(int departmentId, int employeeId);
         Task Update(int departmentId, int employeeId, UpdateEmployeeDto dto);
-
+        Task<bool> UpdateProfileImage(int departmentId, int employeeId, string profileImageUrl);
 
     }
 }

@@ -37,7 +37,7 @@ namespace DispositionSystemAPI.Repository
             var department = this.mapper.Map<Department>(dto);
             //department.CreatedById = _userContextService.GetUserId;
             await this.context.Departments.AddAsync(department);
-            this.context.SaveChanges();
+            await this.context.SaveChangesAsync();
 
             return department.Id;
         }
@@ -68,7 +68,7 @@ namespace DispositionSystemAPI.Repository
 
             this.context.DepartmentAddresses.Remove(address);
             this.context.Departments.Remove(department);
-            this.context.SaveChanges();
+            await this.context.SaveChangesAsync();
             
            
         }
@@ -125,7 +125,7 @@ namespace DispositionSystemAPI.Repository
 
             this.logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
 
-            this.context.SaveChanges();
+            await this.context.SaveChangesAsync();
 
         }
     }

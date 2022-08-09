@@ -24,6 +24,8 @@ using System.Text;
 using DispositionSystemAPI.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using DispositionSystemAPI.Repository;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace DispositionSystemAPI
 {
@@ -104,7 +106,11 @@ namespace DispositionSystemAPI
         {
 
             app.UseResponseCaching();
-            app.UseStaticFiles();   //serwowanie plików na serwerze       
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "PrivateFiles/Images")),
+                RequestPath = "/api/PrivateFiles/Images"
+            });   //serwowanie plików na serwerze       
             app.UseCors("FrontEndClient");
             seeder.Seed();
           

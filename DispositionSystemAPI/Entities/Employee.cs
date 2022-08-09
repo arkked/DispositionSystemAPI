@@ -19,6 +19,8 @@ namespace DispositionSystemAPI.Entities
 
         public int AddressId { get; set; }
 
+        public string ProfileImageUrl { get; set; }
+
         [ForeignKey("AddressId")]
         public virtual EmployeeAddress Address { get; set; }
 

@@ -20,7 +20,6 @@ export class ViewDepartmentComponent implements OnInit {
     city: '',
     street: '',
     postalCode: '',
-    imageUrl: '',
     contactEmail: '',
     contactNumber: ''
   }

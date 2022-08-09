@@ -24,6 +24,9 @@ export class ViewEmployeeComponent implements OnInit {
     profileImageUrl: ''
   }
 
+  isNewEmployee = true;
+  header = '';
+  displayProfileImageUrl = '';
 
   constructor(private readonly departmentService: DepartmentService,
               private readonly route: ActivatedRoute,
@@ -34,19 +37,38 @@ export class ViewEmployeeComponent implements OnInit {
 
     this.route.paramMap.subscribe(
       (params) => {
-        this.departmentId = Number(params.get('id'));
-        this.employeeId = Number(params.get('employeeId'));
 
-        if (this.departmentId && this.employeeId) {
+        if (!isNaN(Number(params.get('employeeId')))) {
+
+          this.departmentId = Number(params.get('id'));
+          this.employeeId = Number(params.get('employeeId'));
+
+          this.isNewEmployee = false;
+          this.header = 'Edit Employee';
+
+
           this.departmentService.getEmployeeById(this.departmentId, this.employeeId)
           .subscribe(
             (successResponse) => {
               console.log(successResponse);
               this.employee = successResponse;
+              this.setImage();
+            },
+            (errorResponse) => {
+              console.log("error:" + errorResponse);
+              this.setImage();
             }
-          )
-        }
+          );
 
+        }
+        else {
+          if (params.get('employeeId')?.toLowerCase() === 'add') {
+            this.departmentId = Number(params.get('id'));
+            this.isNewEmployee = true;
+            this.header = 'Add Employee';
+            this.setImage();
+          }
+        }
       }
     );
   }
@@ -85,4 +107,52 @@ export class ViewEmployeeComponent implements OnInit {
     )
   }
 
+  onAdd() : void {
+    console.log(this.departmentId);
+    this.departmentService.addEmployee(this.departmentId, this.employee)
+      .subscribe(
+        (successResponse) => {
+          this.snackbar.open('Employee has been added succesfully', undefined, {
+            duration: 2000
+          });
+
+          this.router.navigateByUrl('departments');
+
+        },
+        (errorResponse) => {
+          console.log(errorResponse);
+          this.snackbar.open('Something went wrong', undefined, {
+            duration: 2000
+          });
+        }
+      )
+  }
+
+  uploadImage(event: any) : void {
+    if (this.employeeId) {
+      const file: File = event.target.files[0];
+      this.departmentService.uploadImage(this.departmentId, this.employee.id, file)
+        .subscribe(
+          (successResponse) => {
+            this.employee.profileImageUrl = successResponse;
+            this.setImage();
+
+            this.snackbar.open('Employee has been updated successfuly', undefined, {
+              duration: 2000
+            });
+          },
+          (errorResponse) => {
+          }
+        );
+    }
+  }
+
+  private setImage(): void {
+    if (this.employee.profileImageUrl) {
+      this.displayProfileImageUrl = this.departmentService.getImagePath(this.employee.profileImageUrl);
+    }
+    else {
+      this.displayProfileImageUrl = '/assets/default-user.png';
+    }
+  }
 }

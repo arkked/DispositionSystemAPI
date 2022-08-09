@@ -81,6 +81,4 @@ export class DepartmentsComponent implements OnInit {
   filterDepartments(){
     this.dataSource.filter = this.filterString.trim().toLowerCase();
   }
-
-
 }

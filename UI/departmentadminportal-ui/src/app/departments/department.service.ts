@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AddDepartmentRequest } from '../models/api-models/add-department-request.model';
+import { AddEmployeeRequest } from '../models/api-models/add-employee-request.model';
 import { Department } from '../models/api-models/department.model';
 import { Employee } from '../models/api-models/employee.model';
 import { UpdateDepartmentRequest } from '../models/api-models/update-department-request';
@@ -66,6 +67,18 @@ export class DepartmentService {
 
   }
 
+  addEmployee(departmentId: number, employeeRequest: Employee) : Observable<Employee> {
+    const addEmployeeRequest: AddEmployeeRequest = {
+      firstName: employeeRequest.firstName,
+      lastName: employeeRequest.lastName,
+      city: employeeRequest.city,
+      street: employeeRequest.street,
+      postalCode: employeeRequest.postalCode
+    }
+
+    return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee', addEmployeeRequest);
+  }
+
 
   updateEmployee(departmentId: number, employeeId: number, employeeRequest: Employee) : Observable<Employee> {
     const updateEmployeeRequest: UpdateEmployeeRequest = {
@@ -83,5 +96,18 @@ export class DepartmentService {
     return this.httpClient.delete<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId);
   }
 
+  uploadImage(departmentId: number, employeeId: number, file: File) : Observable<any> {
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    return this.httpClient.post(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId + '/files/upload-image', formData, {
+      responseType: 'text'
+    });
+  }
+
+  getImagePath(relativePath: string) {
+    return `${this.baseApiUrl}/${relativePath}`;
+  }
 
 }
