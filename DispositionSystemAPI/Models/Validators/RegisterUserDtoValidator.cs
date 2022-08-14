@@ -8,6 +8,9 @@ namespace DispositionSystemAPI.Models.Validators
     {
         public RegisterUserDtoValidator(DepartmentDbContext dbContext)
         {
+            RuleFor(x => x.FirstName).NotEmpty();
+            RuleFor(x => x.LastName).NotEmpty();
+
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress();

@@ -38,6 +38,8 @@ namespace DispositionSystemAPI.Services
         {
             var newUser = new User()
             {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
                 Email = dto.Email,
                 DateOfBirth = dto.DateOfBirth,
                 Nationality = dto.Nationality,

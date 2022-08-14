@@ -31,7 +31,7 @@ namespace DispositionSystemAPI.Controllers
         public ActionResult Login([FromBody]LoginDto dto)
         {
             string token = _accountService.GenerateJwt(dto);
-            return Ok(token);
+            return Ok(new { Token = token});
         }
     }
 }

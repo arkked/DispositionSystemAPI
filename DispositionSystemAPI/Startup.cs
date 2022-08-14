@@ -75,7 +75,7 @@ namespace DispositionSystemAPI
             
             //services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>(); // do kolekcji serwisów dla typu IAUthorizationHandler rejestrujemy klasê MinimumAgeRequirementHandler()
             services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
-            services.AddControllers().AddFluentValidation();
+            services.AddFluentValidation();
             services.AddDbContext<DepartmentDbContext>();
             services.AddScoped<DepartmentSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
@@ -85,6 +85,8 @@ namespace DispositionSystemAPI
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddScoped<IValidator<EmployeeDto>, AddEmployeeDtoValidator>();
+            services.AddScoped<IValidator<DepartmentDto>, AddDepartmentDtoValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
