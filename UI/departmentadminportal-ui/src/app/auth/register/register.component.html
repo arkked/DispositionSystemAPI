@@ -1,0 +1,83 @@
+<div class="page-header">
+  <div class="container">
+    <h1>Register</h1>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row top-row">
+    <div class="col-xs-12 row end-xs">
+      <a routerLink="/" color="primary" mat-raised-button>
+        <mat-icon>chevron_left</mat-icon>
+        Go Back
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <form #registerForm="ngForm">
+        <div class="row">
+          <div *ngIf="errors.length > 0" class="alert alert-danger">
+            <ul *ngFor="let error of errors">
+              <li>{{error}}</li>
+            </ul>
+          </div>
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input type="text" matInput [(ngModel)]="formData.firstName" name="FirstName">
+            </mat-form-field>
+          </div>
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input type="text" matInput [(ngModel)]="formData.lastName" name="description">
+            </mat-form-field>
+          </div>
+
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="text" matInput [(ngModel)]="formData.email" name="email">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input type="text" matInput [(ngModel)]="formData.password" name="password">
+            </mat-form-field>
+          </div>
+          <div class="col-xs-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm Password</mat-label>
+              <input type="text" matInput [(ngModel)]="formData.confirmPassword" name="confirmPassword">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nationality</mat-label>
+            <input type="text" matInput [(ngModel)]="formData.nationality" name="nationality">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Province</mat-label>
+            <input type="text" matInput [(ngModel)]="formData.province" name="province">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Date Of Birth</mat-label>
+            <input type="text" matInput [(ngModel)]="formData.dateOfBirth" name="dateOfBirth">
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

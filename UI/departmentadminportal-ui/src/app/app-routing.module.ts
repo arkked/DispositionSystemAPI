@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { ViewDepartmentComponent } from './departments/view-department/view-department.component';
 import { ViewEmployeeComponent } from './departments/view-employee/view-employee.component';
+import { HomeComponent } from './home/home.component';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: DepartmentsComponent
+    component: HomeComponent
   },
   {
     path: "departments",
@@ -20,6 +24,14 @@ const routes: Routes = [
   {
     path: 'departments/:id/employees/:employeeId',
     component: ViewEmployeeComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   }
 ];
 

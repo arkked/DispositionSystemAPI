@@ -54,6 +54,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ViewDepartmentComponent } from './departments/view-department/view-department.component';
 import { ViewEmployeeComponent } from './departments/view-employee/view-employee.component';
+import { HomeComponent } from './home/home.component';
+import { AuthModule } from './auth/auth.module';
+
+export function getToken() {
+  return localStorage.getItem("jwt");
+}
 
 
 @NgModule({
@@ -62,7 +68,8 @@ import { ViewEmployeeComponent } from './departments/view-employee/view-employee
     TopNavComponent,
     DepartmentsComponent,
     ViewDepartmentComponent,
-    ViewEmployeeComponent
+    ViewEmployeeComponent,
+    HomeComponent
   ],
   imports: [
     FormsModule,
@@ -105,7 +112,8 @@ import { ViewEmployeeComponent } from './departments/view-employee/view-employee
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule
 
   ],
   schemas: [

@@ -105,6 +105,7 @@ export class ViewDepartmentComponent implements OnInit {
           this.router.navigateByUrl('departments');
         },
         (errorResponse) => {
+          console.log(errorResponse);
           this.snackbar.open('Something went wrong', undefined, {
             duration: 2000
           });
