@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { DepartmentsComponent } from './departments/departments.component';
@@ -15,15 +16,15 @@ const routes: Routes = [
   },
   {
     path: "departments",
-    component: DepartmentsComponent
+    component: DepartmentsComponent, canActivate: [AuthGuard]
   },
   {
     path: 'departments/:id',
-    component: ViewDepartmentComponent
+    component: ViewDepartmentComponent, canActivate: [AuthGuard]
   },
   {
     path: 'departments/:id/employees/:employeeId',
-    component: ViewEmployeeComponent
+    component: ViewEmployeeComponent, canActivate: [AuthGuard]
   },
   {
     path: 'login',

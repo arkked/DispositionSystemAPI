@@ -17,7 +17,7 @@ namespace DispositionSystemAPI.Controllers
 
     [Route("api/department")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class DepartmentController : ControllerBase
     {
 
@@ -43,7 +43,7 @@ namespace DispositionSystemAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CreateDepartment([FromBody]CreateDepartmentDto dto)
         {
            // var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);

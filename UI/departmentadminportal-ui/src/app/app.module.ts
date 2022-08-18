@@ -56,11 +56,8 @@ import { ViewDepartmentComponent } from './departments/view-department/view-depa
 import { ViewEmployeeComponent } from './departments/view-employee/view-employee.component';
 import { HomeComponent } from './home/home.component';
 import { AuthModule } from './auth/auth.module';
-
-export function getToken() {
-  return localStorage.getItem("jwt");
-}
-
+import { HeaderComponent } from './header/header.component';
+import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -69,7 +66,8 @@ export function getToken() {
     DepartmentsComponent,
     ViewDepartmentComponent,
     ViewEmployeeComponent,
-    HomeComponent
+    HomeComponent,
+    HeaderComponent
   ],
   imports: [
     FormsModule,
@@ -113,7 +111,16 @@ export function getToken() {
     MatSortModule,
     MatTableModule,
     HttpClientModule,
-    AuthModule
+    AuthModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {
+          return localStorage.getItem('jwt');
+        },
+        allowedDomains: ["localhost:5001"],
+        disallowedRoutes: []
+      }
+    })
 
   ],
   schemas: [

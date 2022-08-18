@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace DispositionSystemAPI.Controllers
 {
     [Route("api/department/{departmentId}/employee/{employeeId}/files")]
-   // [Authorize]
+    [Authorize]
     public class FileController : ControllerBase
     {
         private readonly IEmployeeRepository employeeRepository;

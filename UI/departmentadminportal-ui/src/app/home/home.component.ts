@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -8,20 +11,22 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
-  constructor(private router: Router) { }
+  loggedin: boolean = false;
+  fullName: string = '';
 
-  isUserAuthenticated() {
-    const token: string | null = localStorage.getItem("jwt");
+  token: string | null = localStorage.getItem("jwt");
 
-    if (token) {
-      return true;
+  constructor(private auth: AuthService) {
+    this.auth.loggedin.subscribe(v => this.loggedin = v);
+
+    if (this.token != null) {
+      let jwtData = this.token.split('.')[1];
+      let decodedJwtJsonData = window.atob(jwtData);
+      let decodedJwtData = JSON.parse(decodedJwtJsonData);
+      this.fullName = decodedJwtData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+
     }
-    else {
-      return false;
-    }
-  }
+   }
 
-  logOut() {
-    localStorage.removeItem("jwt");
-  }
 }

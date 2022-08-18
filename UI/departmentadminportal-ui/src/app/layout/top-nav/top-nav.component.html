@@ -1,14 +1,13 @@
 <mat-toolbar color="primary">
-  <div class="container">
-    <a routerLink="/" mat-fab color="accent">
-      <mat-icon>home</mat-icon>
-    </a>
-
-    <a routerLink="/departments" mat-raised-button>Departments</a>
-
-    <a routerLink="/login" mat-raised-button>Sign In</a>
-
-    <a routerLink="/register" mat-raised-button>Sign Up</a>
-
-  </div>
+  <span class="example-spacer"></span>
+    <div class="container" fxShow="true" fxHide.lt-md="true">
+      <a routerLink="/" mat-fab color="accent">
+        <mat-icon>home</mat-icon>
+      </a>
+      <a routerLink="/departments" mat-raised-button *ngIf="loggedin">Departments</a>
+    </div>
+    <span class="example-spacer"></span>
+    <button routerLink="/login" class="nav" mat-raised-button *ngIf="!loggedin">Sign In</button>
+    <a routerLink="/register" class="nav" mat-raised-button *ngIf="!loggedin">Sign Up</a>
+    <a routerLink="/" class="nav" mat-raised-button *ngIf="loggedin" (click)="logOut()">Sing out</a>
 </mat-toolbar>

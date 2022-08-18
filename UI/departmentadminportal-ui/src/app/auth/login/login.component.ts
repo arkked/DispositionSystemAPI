@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   invalidLogin!: boolean;
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private auth: AuthService) { }
 
   login(form: NgForm) {
     const credentials = {
@@ -19,17 +20,14 @@ export class LoginComponent {
       'password': form.value.password
     }
 
-    console.log(credentials.email, credentials.password);
-
     this.http.post("https://localhost:5001/api/account/login", credentials)
       .subscribe(
         (successResponse) => {
-          console.log(successResponse);
-
           const token = (<any>successResponse).token;
           localStorage.setItem("jwt", token);
           this.invalidLogin = false;
           this.router.navigate(["/"]);
+          this.auth.isUserAuthenticated();
 
         },
         errorResponse => {
@@ -37,6 +35,11 @@ export class LoginComponent {
         }
       )
 
+  }
+
+  isLoggedIn()
+  {
+    this.auth.isUserAuthenticated();
   }
 
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-top-nav',
@@ -7,9 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopNavComponent implements OnInit {
 
-  constructor() { }
+  loggedin: boolean = false;
+
+  constructor(private auth: AuthService, private jwtHelper: JwtHelperService) {
+    this.auth.loggedin.subscribe(v => this.loggedin = v);
+    console.log(this.loggedin);
+
+   }
 
   ngOnInit(): void {
   }
+
+
+  logOut()
+  {
+    this.auth.logOut();
+    this.auth.isUserAuthenticated();
+  }
+
 
 }
