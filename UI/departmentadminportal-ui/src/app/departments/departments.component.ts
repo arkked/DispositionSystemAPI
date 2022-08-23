@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Department } from '../models/ui-models/department.model';
 import { DepartmentService } from './department.service';
@@ -6,6 +6,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Employee } from '../models/ui-models/employee.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { GoogleMap } from '@angular/google-maps';
 
 
 @Component({

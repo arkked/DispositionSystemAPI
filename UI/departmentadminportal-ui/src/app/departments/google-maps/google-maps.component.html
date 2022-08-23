@@ -1,0 +1,27 @@
+
+<div class="form-group">
+  <label>Enter address</label>
+  <input type="text" class="" (keydown.enter)="$event.preventDefault()" placeholder="Search location" #search>
+</div>
+<google-map height="50vh"
+            width="90vw"
+            [center]="center"
+            [zoom]="zoom"
+            [options]="mapOptions"
+
+>
+<map-marker *ngFor="let markerPosition of markerDepartmentsPositions"
+[position]="markerPosition"
+[options]="markerDepartmentOptions">
+</map-marker>
+
+<map-marker *ngFor="let markerPosition of markerEmployeesPositions"
+[position]="markerPosition"
+[options]="markerEmployeeOptions">
+</map-marker>
+
+</google-map>
+
+<!--
+(mapClick)="moveMap($event)"
+(mapMousemove)="move($event)" -->

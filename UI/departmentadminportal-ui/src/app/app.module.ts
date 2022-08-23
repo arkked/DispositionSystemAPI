@@ -56,8 +56,11 @@ import { ViewDepartmentComponent } from './departments/view-department/view-depa
 import { ViewEmployeeComponent } from './departments/view-employee/view-employee.component';
 import { HomeComponent } from './home/home.component';
 import { AuthModule } from './auth/auth.module';
-import { HeaderComponent } from './header/header.component';
 import { JwtModule } from '@auth0/angular-jwt';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapsComponent } from './departments/google-maps/google-maps.component';
+import { MapMarkerComponent } from './departments/map-marker/map-marker.component';
+import { MapInfoWindowComponent } from './departments/map-info-window/map-info-window.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +70,9 @@ import { JwtModule } from '@auth0/angular-jwt';
     ViewDepartmentComponent,
     ViewEmployeeComponent,
     HomeComponent,
-    HeaderComponent
+    GoogleMapsComponent,
+    MapMarkerComponent,
+    MapInfoWindowComponent
   ],
   imports: [
     FormsModule,
@@ -120,7 +125,9 @@ import { JwtModule } from '@auth0/angular-jwt';
         allowedDomains: ["localhost:5001"],
         disallowedRoutes: []
       }
-    })
+    }),
+
+    GoogleMapsModule
 
   ],
   schemas: [

@@ -14,19 +14,14 @@ export class TopNavComponent implements OnInit {
 
   constructor(private auth: AuthService, private jwtHelper: JwtHelperService) {
     this.auth.loggedin.subscribe(v => this.loggedin = v);
-    console.log(this.loggedin);
-
    }
 
   ngOnInit(): void {
   }
-
 
   logOut()
   {
     this.auth.logOut();
     this.auth.isUserAuthenticated();
   }
-
-
 }

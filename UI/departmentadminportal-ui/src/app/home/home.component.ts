@@ -24,8 +24,6 @@ export class HomeComponent {
       let decodedJwtJsonData = window.atob(jwtData);
       let decodedJwtData = JSON.parse(decodedJwtJsonData);
       this.fullName = decodedJwtData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-
-
     }
    }
 

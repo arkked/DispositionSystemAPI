@@ -34,7 +34,6 @@ export class LoginComponent {
           this.invalidLogin = true;
         }
       )
-
   }
 
   isLoggedIn()
