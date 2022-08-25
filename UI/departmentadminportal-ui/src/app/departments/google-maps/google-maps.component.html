@@ -15,11 +15,16 @@
 [options]="markerDepartmentOptions">
 </map-marker>
 
-<map-marker *ngFor="let markerPosition of markerEmployeesPositions"
+<map-marker #marker = "mapMarker" *ngFor="let markerPosition of markerEmployeesPositions"
 [position]="markerPosition"
-[options]="markerEmployeeOptions">
+[options]="markerEmployeeOptions"
+(mapClick)="openInfoWindow(marker)">
 </map-marker>
+<map-info-window>
 
+  <h3>Assign to action: </h3>
+
+</map-info-window>
 </google-map>
 
 <!--

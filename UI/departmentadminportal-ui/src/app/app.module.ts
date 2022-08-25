@@ -61,6 +61,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { GoogleMapsComponent } from './departments/google-maps/google-maps.component';
 import { MapMarkerComponent } from './departments/map-marker/map-marker.component';
 import { MapInfoWindowComponent } from './departments/map-info-window/map-info-window.component';
+import { MarkerInfoComponent } from './departments/google-maps/marker-info/marker-info.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { MapInfoWindowComponent } from './departments/map-info-window/map-info-w
     HomeComponent,
     GoogleMapsComponent,
     MapMarkerComponent,
-    MapInfoWindowComponent
+    MapInfoWindowComponent,
+    MarkerInfoComponent
   ],
   imports: [
     FormsModule,

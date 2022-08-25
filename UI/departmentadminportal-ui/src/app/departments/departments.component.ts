@@ -29,6 +29,8 @@ export class DepartmentsComponent implements OnInit {
   @ViewChildren('innerSort') innerSort!: QueryList<MatSort>;
   @ViewChildren('innerTables') innerTables!: QueryList<MatTable<Employee>>;
 
+  token: string | null = localStorage.getItem("jwt");
+
   dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>([]);
   departments: Department[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode', 'contactEmail', 'contactNumber'];
@@ -36,11 +38,27 @@ export class DepartmentsComponent implements OnInit {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
   expandedElement: Department | null;
+  role: string = '';
+  isAuthorized: boolean = false;
 
   filterString = '';
 
   constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef) {
       this.expandedElement = null;
+
+      if (this.token != null) {
+        let jwtData = this.token.split('.')[1];
+        let decodedJwtJsonData = window.atob(jwtData);
+        let decodedJwtData = JSON.parse(decodedJwtJsonData);
+        this.role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+        console.log(this.role);
+
+        if (this.role === 'Manager' || this.role === 'Admin') {
+          this.isAuthorized = true;
+        }
+
+      }
    }
 
   ngOnInit(): void {

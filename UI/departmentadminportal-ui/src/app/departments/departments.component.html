@@ -7,9 +7,13 @@
 
 <div class="container">
   <div class="mt-1 mat-elevation-z8">
-    <div class="row center-xs">
+    <div class="row center-xs" *ngIf="isAuthorized">
       <app-google-maps [departments]="departments"></app-google-maps>
     </div>
+    <div class="row center-xs" *ngIf="!isAuthorized">
+      Notifications
+    </div>
+
 
   </div>
 </div>
@@ -21,7 +25,7 @@
       <input type="text" class="search-input" placeholder="Search departments"
       [(ngModel)]="filterString"
         (keyup)="filterDepartments()">
-        <a routerLink="/departments/add" mat-raised-button color="primary" class="ml-1">Add Department</a>
+        <a routerLink="/departments/add" mat-raised-button color="primary" class="ml-1" *ngIf="isAuthorized">Add Department</a>
     </div>
   </div>
   <div class="mt-1 mat-elevation-z8">
@@ -40,7 +44,7 @@
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let element">
-          <a [routerLink]="['/departments', element.id]">
+          <a [routerLink]="['/departments', element.id]" *ngIf="isAuthorized">
             <mat-icon color="primary">edit</mat-icon>
           </a>
         </td>
@@ -74,7 +78,7 @@
         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
           <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
             <div class="inner-table mat-elevation-z8" *ngIf="expandedElement">
-              <a [routerLink]="['/departments', element.id, 'employees', 'add']" mat-raised-button color="primary" class="ml-1">Add Employee</a>
+              <a [routerLink]="['/departments', element.id, 'employees', 'add']" mat-raised-button color="primary" class="ml-1" *ngIf="isAuthorized">Add Employee</a>
               <table #innerTables mat-table #innerSort="matSort" [dataSource]="element.employees" matSort>
                 <ng-container matColumnDef="{{innerColumn}}" *ngFor="let innerColumn of innerDisplayedColumns">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>{{innerColumn[0].toUpperCase() + innerColumn.substr(1)}}</th>
@@ -84,7 +88,7 @@
                 <ng-container matColumnDef="edit">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                   <td mat-cell *matCellDef="let employeeElement">
-                    <a [routerLink]="['/departments', element.id, 'employees', employeeElement.id]">
+                    <a [routerLink]="['/departments', element.id, 'employees', employeeElement.id]" *ngIf="isAuthorized">
                       <mat-icon color="primary">edit</mat-icon>
                     </a>
                   </td>
