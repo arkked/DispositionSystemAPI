@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TemplateBindingParseResult, ThisReceiver } from '@angular/compiler';
 import { Injectable, resolveForwardRef } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { from, Observable, switchMap, tap } from 'rxjs';
 import { AddDepartmentRequest } from '../models/api-models/add-department-request.model';
 import { AddEmployeeRequest } from '../models/api-models/add-employee-request.model';
 import { Department } from '../models/api-models/department.model';
@@ -70,34 +70,45 @@ export class DepartmentService {
     }
 
     return this.httpClient.post<Department>(this.baseApiUrl + '/department', addDepartmentRequest);
+  }
 
+  setUpdatedEmployee(employeeResponse: Employee) {
+    if (employeeResponse) {
+      this.employeeRequest= employeeResponse;
+    }
+  }
+
+  callAfterAddUpdatedEmployee(departmentId: number) : Observable<Employee> {
+    return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee', this.employeeRequest);
   }
 
   addEmployee(departmentId: number, employeeRequest: Employee) : Observable<Employee> {
 
     this.employeeRequest = employeeRequest;
-    console.log(this.employeeRequest);
 
     let employeeAddress = '';
     employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
+    var employee = this.geocodeEmployees({address: employeeAddress});
 
-    return this.geocodeEmployees({address: employeeAddress}, departmentId);
+    return employee.pipe(tap(employeeResponse => this.setUpdatedEmployee(employeeResponse)),
+      switchMap(_=>this.callAfterAddUpdatedEmployee(departmentId)))
+
   }
 
+  callAfterUpdateEmployee(departmentId: number, employeeId: number) : Observable<Employee> {
+    return this.httpClient.put<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId, this.employeeRequest);
+  }
 
   updateEmployee(departmentId: number, employeeId: number, employeeRequest: Employee) : Observable<Employee> {
 
-    const updateEmployeeRequest: UpdateEmployeeRequest = {
-      firstName: employeeRequest.firstName,
-      lastName: employeeRequest.lastName,
-      city: employeeRequest.city,
-      street: employeeRequest.street,
-      postalCode: employeeRequest.postalCode,
-      lat: employeeRequest.lat,
-      lng: employeeRequest.lng
-    }
+    this.employeeRequest = employeeRequest;
 
-    return this.httpClient.put<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId, updateEmployeeRequest);
+    let employeeAddress = '';
+    employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
+    var employee = this.geocodeEmployees({address: employeeAddress});
+
+    return employee.pipe(tap(employeeResponse => this.setUpdatedEmployee(employeeResponse)),
+      switchMap(_=>this.callAfterUpdateEmployee(departmentId, employeeId)));
   }
 
   deleteEmployee(departmentId: number, employeeId: number) : Observable<Employee> {
@@ -118,7 +129,7 @@ export class DepartmentService {
     return `${this.baseApiUrl}/${relativePath}`;
   }
 
-  geocodeEmployees(request: google.maps.GeocoderRequest, departmentId: number) : Observable<Employee>
+  geocodeEmployees(request: google.maps.GeocoderRequest) : Observable<Employee>
   {
      const result = from(this.geocoder.geocode(request).then((result) => {
 
@@ -127,27 +138,10 @@ export class DepartmentService {
       this.employeeRequest.lat = results[0].geometry.location.lat();
       this.employeeRequest.lng = results[0].geometry.location.lng();
 
-      var temp = new google.maps.LatLng( this.employeeRequest.lat, this.employeeRequest.lng)
-      console.log(temp);
-
-      this.position.push(temp)
-
-      console.log(this.employeeRequest.lat);
-      console.log(this.employeeRequest.lng);
-
-      console.log(this.employeeRequest);
-
       return this.employeeRequest;
     }));
 
-
-    console.log(this.employeeRequest);
-    console.log(this.employeeRequest.lat);
-    console.log(this.employeeRequest.lng);
-
-
-    // const obj$ = from(result);
-     return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee', this.employeeRequest);
+    return result;
 
   }
 }

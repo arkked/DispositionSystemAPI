@@ -52,8 +52,6 @@ export class DepartmentsComponent implements OnInit {
         let decodedJwtData = JSON.parse(decodedJwtJsonData);
         this.role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-        console.log(this.role);
-
         if (this.role === 'Manager' || this.role === 'Admin') {
           this.isAuthorized = true;
         }
