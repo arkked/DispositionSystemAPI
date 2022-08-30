@@ -1,0 +1,10 @@
+.addressInput {
+  margin-top: 5px;
+  width: 50vh;
+  height: 2vw;
+}
+
+.addressInput::placeholder {
+  font-size: 16px;
+  text-align: center;
+}

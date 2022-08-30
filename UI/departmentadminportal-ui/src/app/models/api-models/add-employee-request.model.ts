@@ -4,4 +4,6 @@ export interface AddEmployeeRequest {
   city: string,
   street: string,
   postalCode: string,
+  lat: number,
+  lng: number
 }

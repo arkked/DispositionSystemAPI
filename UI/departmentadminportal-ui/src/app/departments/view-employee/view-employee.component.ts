@@ -21,8 +21,12 @@ export class ViewEmployeeComponent implements OnInit {
     city: '',
     street: '',
     postalCode: '',
-    profileImageUrl: ''
+    profileImageUrl: '',
+    lat: 0,
+    lng: 0
   }
+
+
 
   isNewEmployee = true;
   header = '';
@@ -50,7 +54,6 @@ export class ViewEmployeeComponent implements OnInit {
           this.departmentService.getEmployeeById(this.departmentId, this.employeeId)
           .subscribe(
             (successResponse) => {
-              console.log(successResponse);
               this.employee = successResponse;
               this.setImage();
             },
@@ -108,10 +111,10 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   onAdd() : void {
-    console.log(this.departmentId);
     this.departmentService.addEmployee(this.departmentId, this.employee)
       .subscribe(
         (successResponse) => {
+
           this.snackbar.open('Employee has been added succesfully', undefined, {
             duration: 2000
           });
@@ -150,9 +153,14 @@ export class ViewEmployeeComponent implements OnInit {
   private setImage(): void {
     if (this.employee.profileImageUrl) {
       this.displayProfileImageUrl = this.departmentService.getImagePath(this.employee.profileImageUrl);
+
     }
     else {
       this.displayProfileImageUrl = '/assets/default-user.png';
     }
   }
+
+
+
+
 }

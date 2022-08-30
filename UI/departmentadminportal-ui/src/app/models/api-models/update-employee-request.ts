@@ -4,4 +4,6 @@ export interface UpdateEmployeeRequest {
   city: string,
   street: string,
   postalCode: string
+  lat: number,
+  lng: number
 }

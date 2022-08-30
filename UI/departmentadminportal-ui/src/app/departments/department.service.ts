@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { TemplateBindingParseResult, ThisReceiver } from '@angular/compiler';
+import { Injectable, resolveForwardRef } from '@angular/core';
+import { from, Observable } from 'rxjs';
 import { AddDepartmentRequest } from '../models/api-models/add-department-request.model';
 import { AddEmployeeRequest } from '../models/api-models/add-employee-request.model';
 import { Department } from '../models/api-models/department.model';
@@ -15,6 +16,11 @@ import { UpdateEmployeeRequest } from '../models/api-models/update-employee-requ
 export class DepartmentService {
 
   private baseApiUrl = 'https://localhost:5001/api';
+
+  geocoder = new google.maps.Geocoder();
+
+  employeeRequest!: Employee;
+  position!: google.maps.LatLng[];
 
   constructor(private httpClient: HttpClient) { }
 
@@ -68,25 +74,27 @@ export class DepartmentService {
   }
 
   addEmployee(departmentId: number, employeeRequest: Employee) : Observable<Employee> {
-    const addEmployeeRequest: AddEmployeeRequest = {
-      firstName: employeeRequest.firstName,
-      lastName: employeeRequest.lastName,
-      city: employeeRequest.city,
-      street: employeeRequest.street,
-      postalCode: employeeRequest.postalCode
-    }
 
-    return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee', addEmployeeRequest);
+    this.employeeRequest = employeeRequest;
+    console.log(this.employeeRequest);
+
+    let employeeAddress = '';
+    employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
+
+    return this.geocodeEmployees({address: employeeAddress}, departmentId);
   }
 
 
   updateEmployee(departmentId: number, employeeId: number, employeeRequest: Employee) : Observable<Employee> {
+
     const updateEmployeeRequest: UpdateEmployeeRequest = {
       firstName: employeeRequest.firstName,
       lastName: employeeRequest.lastName,
       city: employeeRequest.city,
       street: employeeRequest.street,
-      postalCode: employeeRequest.postalCode
+      postalCode: employeeRequest.postalCode,
+      lat: employeeRequest.lat,
+      lng: employeeRequest.lng
     }
 
     return this.httpClient.put<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId, updateEmployeeRequest);
@@ -110,4 +118,36 @@ export class DepartmentService {
     return `${this.baseApiUrl}/${relativePath}`;
   }
 
+  geocodeEmployees(request: google.maps.GeocoderRequest, departmentId: number) : Observable<Employee>
+  {
+     const result = from(this.geocoder.geocode(request).then((result) => {
+
+      const { results } = result;
+
+      this.employeeRequest.lat = results[0].geometry.location.lat();
+      this.employeeRequest.lng = results[0].geometry.location.lng();
+
+      var temp = new google.maps.LatLng( this.employeeRequest.lat, this.employeeRequest.lng)
+      console.log(temp);
+
+      this.position.push(temp)
+
+      console.log(this.employeeRequest.lat);
+      console.log(this.employeeRequest.lng);
+
+      console.log(this.employeeRequest);
+
+      return this.employeeRequest;
+    }));
+
+
+    console.log(this.employeeRequest);
+    console.log(this.employeeRequest.lat);
+    console.log(this.employeeRequest.lng);
+
+
+    // const obj$ = from(result);
+     return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee', this.employeeRequest);
+
+  }
 }

@@ -5,5 +5,7 @@ export interface Employee {
   city: string,
   street: string,
   postalCode: string,
+  lat: number,
+  lng: number,
   profileImageUrl: string
 }
