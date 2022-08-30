@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using DispositionSystemAPI.Authorization;
 using DispositionSystemAPI.Entities;
 using DispositionSystemAPI.Exceptions;
 using DispositionSystemAPI.Models;
+using DispositionSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -15,12 +18,17 @@ namespace DispositionSystemAPI.Repository
         private readonly DepartmentDbContext context;
         private readonly IMapper mapper;
         private readonly ILogger<EmployeeRepository> logger;
+        private readonly IAuthorizationService authorizationService;
+        private readonly IUserContextService userContextService;
 
-        public EmployeeRepository(DepartmentDbContext context, IMapper mapper, ILogger<EmployeeRepository> logger)
+        public EmployeeRepository(DepartmentDbContext context, IMapper mapper, ILogger<EmployeeRepository> logger,
+            IAuthorizationService authorizationService, IUserContextService userContextService)
         {
             this.context = context;
             this.mapper = mapper;
             this.logger = logger;
+            this.authorizationService = authorizationService;
+            this.userContextService = userContextService;
         }
 
         public async Task<int> Create(int departmentId, AddEmployeeDto dto)
@@ -85,7 +93,7 @@ namespace DispositionSystemAPI.Repository
 
             if (employee == null) throw new NotFoundException("Employee not found.");
 
-            //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
+            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
             //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
             //if (!authorizationResult.Succeeded)
@@ -96,6 +104,8 @@ namespace DispositionSystemAPI.Repository
             employee.FirstName = dto.FirstName;
             employee.LastName = dto.LastName;
             employee.Address = mapper.Map<EmployeeAddress>(dto);
+            employee.Lat = dto.Lat;
+            employee.Lng = dto.Lng;
 
             this.logger.LogInformation($"Employee with id: {employeeId} UPDATE action invoked. Updated data: '{employee.FirstName}' to '{dto.FirstName}', '{employee.LastName}' to '{dto.LastName}'");
             await this.context.SaveChangesAsync();
@@ -123,6 +133,26 @@ namespace DispositionSystemAPI.Repository
             await this.context.SaveChangesAsync();
             return true;
         }
+
+        public async Task AssignToAction(int actionId, int employeeId)
+        {
+            var employee = await this.context.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
+
+            if (employee == null) throw new NotFoundException("Employee not found.");
+
+            var user = await this.context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email);
+
+            if (user == null) throw new NotFoundException("User not found.");
+
+            employee.ActionId = actionId;
+
+            //TODO send notification here
+
+            await this.context.SaveChangesAsync();
+
+
+        }
+
 
         private async Task<Department> GetDepartmentById(int departmentId)
         {

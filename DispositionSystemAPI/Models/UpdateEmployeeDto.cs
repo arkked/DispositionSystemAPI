@@ -11,5 +11,8 @@ namespace DispositionSystemAPI.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string PostalCode { get; set; }
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DispositionSystemAPI.Authorization;
 using DispositionSystemAPI.Entities;
 using DispositionSystemAPI.Exceptions;
 using DispositionSystemAPI.Models;
@@ -57,13 +58,13 @@ namespace DispositionSystemAPI.Repository
             if (department is null) throw new NotFoundException("Department not found");
 
             
-            //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
-            //new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
+            var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
+            new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
-            //if (!authorizationResult.Succeeded)
-            //{
-            //    throw new ForbidException("Authorization failed");
-            //}
+            if (!authorizationResult.Succeeded)
+            {
+                throw new ForbidException("Authorization failed");
+            }
 
 
             this.context.DepartmentAddresses.Remove(address);
@@ -107,14 +108,14 @@ namespace DispositionSystemAPI.Repository
 
             if (department is null) throw new NotFoundException("Department not found");
 
-            //var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, department,
+            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
             //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
             //if (!authorizationResult.Succeeded)
             //{
             //    throw new ForbidException("Authorization failed");
             //}
-            //
+
             department.Name = dto.Name;
             department.Description = dto.Description;
             department.Category = dto.Category;

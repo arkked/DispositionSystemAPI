@@ -22,6 +22,8 @@ namespace DispositionSystemAPI.Entities
 
         public DbSet<Role> Roles { get; set; }
 
+        public DbSet<Action> Actions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

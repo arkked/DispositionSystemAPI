@@ -19,6 +19,10 @@ namespace DispositionSystemAPI.Models
 
         public int DepartmentId { get; set; }
 
+        public double Lat { get; set; }
+
+        public double Lng { get; set; }
+
         public string City { get; set; }
 
         public string Street { get; set; }

@@ -1,6 +1,7 @@
 ﻿using DispositionSystemAPI.Models;
 using DispositionSystemAPI.Repository;
 using DispositionSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ namespace DispositionSystemAPI.Controllers
 {
     [Route("api/department/{departmentId}/employee")]
     [ApiController]
-
+    //[Authorize]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository employeeRepository;
@@ -68,6 +69,14 @@ namespace DispositionSystemAPI.Controllers
             return NoContent();
         }
 
+
+        //TODO Query parameters
+        [HttpPost("{actionId}")]
+        public async Task<ActionResult> AssignToAction([FromBody] int actionId, int employeeId)
+        {
+            await this.employeeRepository.AssignToAction(actionId, employeeId);
+            return Ok();
+        }
     }
 
 }

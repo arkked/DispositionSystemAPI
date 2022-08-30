@@ -14,6 +14,8 @@ namespace DispositionSystemAPI.Models
 
         public string LastName { get; set; }
 
+        public string Email { get; set; }
+
         public string ProfileImageUrl { get; set; }
     
         public string City { get; set; }
@@ -21,6 +23,10 @@ namespace DispositionSystemAPI.Models
         public string Street { get; set; }
 
         public string PostalCode { get; set; }
+
+        public double Lat { get; set; }
+
+        public double Lng { get; set; }
 
     }
 }

@@ -46,7 +46,11 @@ namespace DispositionSystemAPI
             CreateMap<AddEmployeeDto, Employee>()
                 .ForMember(d => d.Address, c => c.MapFrom(dto => new EmployeeAddress
                 { Street = dto.Street, City = dto.City, PostalCode = dto.PostalCode }));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+            CreateMap<CreateActionDto, Entities.Action>()
+                .ForMember(d => d.Lat, c => c.MapFrom(dto => dto.Latitude))
+                .ForMember(d => d.Lng, c => c.MapFrom(dto => dto.Longitude))
+                .ForMember(d => d.Name, c => c.MapFrom(dto => dto.Name));
         }
     }
 }

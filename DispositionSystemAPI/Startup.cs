@@ -79,8 +79,11 @@ namespace DispositionSystemAPI
             services.AddDbContext<DepartmentDbContext>();
             services.AddScoped<DepartmentSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
+            
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IActionRepository, ActionRepository>();
+
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
