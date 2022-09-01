@@ -49,8 +49,11 @@ namespace DispositionSystemAPI
 
             CreateMap<CreateActionDto, Entities.Action>()
                 .ForMember(d => d.Lat, c => c.MapFrom(dto => dto.Latitude))
-                .ForMember(d => d.Lng, c => c.MapFrom(dto => dto.Longitude))
-                .ForMember(d => d.Name, c => c.MapFrom(dto => dto.Name));
+                .ForMember(d => d.Lng, c => c.MapFrom(dto => dto.Longitude));
+
+            CreateMap<Entities.Action, ActionDto>();
+                
+
         }
     }
 }

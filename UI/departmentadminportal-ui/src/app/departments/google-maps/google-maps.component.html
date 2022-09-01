@@ -7,10 +7,7 @@
             [center]="center"
             [zoom]="zoom"
             [options]="mapOptions"
-            (mapClick)="addMarker($event)"
-
->
-
+            (mapClick)="addMarker($event)">
 
 <map-marker *ngFor="let markerPosition of markerDepartmentsPositions"
 [position]="markerPosition"
@@ -20,7 +17,7 @@
 <map-marker #marker = "mapMarker" *ngFor="let markerPosition of markerEmployeesPositions; let i = index"
 [position]="markerPosition.position"
 [options]="markerEmployeeOptions"
-(mapClick)="openInfoWindow(marker, i)">
+(mapClick)="openEmployeeInfoWindow(marker, i)">
 
 <map-info-window>
 
@@ -30,10 +27,22 @@
 </map-info-window>
 </map-marker>
 
-<map-marker *ngFor="let markerPosition of markerActionsPositions"
-            [position]="markerPosition"
+<map-marker #marker2 = "mapMarker" *ngFor="let markerPosition of markerActionsPositions; let i = index"
+            [position]="markerPosition.position"
             [options]="markerActionOptions"
-            >
+            (mapClick)="openActionInfoWindow(marker2, i, actionWindow)">
+
+            <map-info-window #actionWindow = "mapInfoWindow">
+
+              <h3 *ngIf="markerPosition.name">{{markerPosition.name}}</h3>
+                <input type="text" id="actionName" name="actionName" placeholder="Enter name" *ngIf="!markerPosition.name" #actionName>
+                <h3>Lat: {{markerPosition.position.lat()}} Lng: {{markerPosition.position.lng()}}</h3>
+                <div class="row between-xs">
+                  <button mat-raised-button color="primary" (click)="onUpdate(markerPosition.actionId)" *ngIf="!markerPosition.name">Save</button>
+                  <button mat-raised-button color="warn" (click)="onDelete(markerPosition.actionId)">Delete</button>
+                </div>
+            </map-info-window>
+
             </map-marker>
 
 </google-map>

@@ -3,6 +3,7 @@ using DispositionSystemAPI.Entities;
 using DispositionSystemAPI.Exceptions;
 using DispositionSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DispositionSystemAPI.Repository
@@ -18,6 +19,14 @@ namespace DispositionSystemAPI.Repository
             this.mapper = mapper;
         }
 
+        public async Task<List<ActionDto>> GetAll()
+        {
+            var actions = await this.context.Actions.ToListAsync();
+
+            var actionDtos = this.mapper.Map<List<ActionDto>>(actions);
+
+            return actionDtos;
+        }
 
         public async Task<int> Create(CreateActionDto dto)
         {
@@ -36,6 +45,18 @@ namespace DispositionSystemAPI.Repository
             if (action == null) throw new NotFoundException("Action not found.");
 
             this.context.Remove(action);
+            await this.context.SaveChangesAsync();
+
+        }
+
+        public async Task Update(int actionId, UpdateActionDto dto)
+        {
+            var action = await this.context.Actions.FirstOrDefaultAsync(x => x.Id == actionId);
+
+            if (action == null) throw new NotFoundException("Action not found.");
+
+            action.Name = dto.Name;
+
             await this.context.SaveChangesAsync();
 
         }

@@ -7,6 +7,7 @@ import { Employee } from '../models/ui-models/employee.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { GoogleMap } from '@angular/google-maps';
+import { Action } from '../models/api-models/action.model';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class DepartmentsComponent implements OnInit {
 
   dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>([]);
   departments: Department[] = [];
+  actions: Action[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode', 'contactEmail', 'contactNumber'];
   innerDisplayedColumns = ['id', 'firstName', 'lastName', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];

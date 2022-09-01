@@ -2,10 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { TemplateBindingParseResult, ThisReceiver } from '@angular/compiler';
 import { Injectable, resolveForwardRef } from '@angular/core';
 import { from, Observable, switchMap, tap } from 'rxjs';
+import { Action } from '../models/api-models/action.model';
+import { AddActionRequest } from '../models/api-models/add-action-request.model';
 import { AddDepartmentRequest } from '../models/api-models/add-department-request.model';
 import { AddEmployeeRequest } from '../models/api-models/add-employee-request.model';
 import { Department } from '../models/api-models/department.model';
 import { Employee } from '../models/api-models/employee.model';
+import { UpdateActionRequest } from '../models/api-models/update-action-request.model';
 import { UpdateDepartmentRequest } from '../models/api-models/update-department-request';
 import { UpdateEmployeeRequest } from '../models/api-models/update-employee-request';
 
@@ -92,6 +95,38 @@ export class DepartmentService {
 
     return employee.pipe(tap(employeeResponse => this.setUpdatedEmployee(employeeResponse)),
       switchMap(_=>this.callAfterAddUpdatedEmployee(departmentId)))
+
+  }
+
+
+  getActions() : Observable<Action[]> {
+    return this.httpClient.get<Action[]>(this.baseApiUrl + '/actions')
+  }
+
+  addAction(actionRequest: Action) : Observable<Action> {
+
+    const addAction: AddActionRequest = {
+      Longitude: actionRequest.lng,
+      Latitude: actionRequest.lat
+    }
+    return this.httpClient.post<Action>(this.baseApiUrl + '/actions', addAction);
+  }
+
+  updateAction(actionId: number, actionRequest: Action) : Observable<Action> {
+
+    const updateAction: UpdateActionRequest = {
+      id: actionRequest.id,
+      name: actionRequest.name
+    }
+    console.log(updateAction);
+
+    return this.httpClient.put<Action>(this.baseApiUrl + '/actions/' + actionId, updateAction);
+
+  }
+
+  deleteAction(actionId: number) : Observable<Action> {
+
+    return this.httpClient.delete<Action>(this.baseApiUrl + '/actions/' + actionId);
 
   }
 

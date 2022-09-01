@@ -1,9 +1,13 @@
 import { Component, ElementRef, Input, NgZone, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable, switchMap, tap } from 'rxjs';
+import { Action } from 'src/app/models/api-models/action.model';
 import { Department } from 'src/app/models/ui-models/department.model';
 import { Employee } from 'src/app/models/ui-models/employee.model';
+import { ActionMarker } from 'src/app/models/ui-models/marker-action.model';
 import { MarkerEmployee } from 'src/app/models/ui-models/marker.model';
 import { DepartmentService } from '../department.service';
 
@@ -20,9 +24,14 @@ export class GoogleMapsComponent {
   @ViewChild(GoogleMap)
   public map!: GoogleMap;
 
-  @ViewChildren(MapInfoWindow) infoWindow?: QueryList<MapInfoWindow>;
+  @ViewChildren(MapInfoWindow) employeeInfoWindow?: QueryList<MapInfoWindow>;
+  @ViewChildren(MapInfoWindow) actionInfoWindow?: QueryList<MapInfoWindow>;
+
+
 
   @Input() departments: Department[] = [];
+  actions: Action[] = [];
+  actionName?: string;
 
   display: any;
   center: google.maps.LatLngLiteral = {lat: 50.63790500644537, lng: 18.842152396326448,};
@@ -52,7 +61,7 @@ export class GoogleMapsComponent {
 
   markerDepartmentsPositions: google.maps.LatLng[] = [];
   markerEmployeesPositions: MarkerEmployee[] = [];
-  markerActionsPositions: google.maps.LatLng[] = [];
+  markerActionsPositions: ActionMarker[] = [];
 
   latitude!: any;
   longitude!: any;
@@ -72,7 +81,7 @@ export class GoogleMapsComponent {
     lng: 0
   }
 
-  constructor(private ngZone: NgZone, private departmentService: DepartmentService) { }
+  constructor(private ngZone: NgZone, private departmentService: DepartmentService, private snackbar: MatSnackBar,) { }
 
   ngAfterViewInit(): void {
 
@@ -106,6 +115,22 @@ export class GoogleMapsComponent {
         lng: position.coords.longitude
       }
     });
+
+    this.departmentService.getActions().subscribe(
+      data => {
+        data.forEach(action => {
+          let position =
+          {
+            actionId: action.id,
+            name: action.name,
+            position: new google.maps.LatLng(action.lat,action.lng)
+
+          }
+
+          this.markerActionsPositions.push(position);
+        })
+      }
+    );
   }
 
   ngOnChanges()
@@ -130,7 +155,6 @@ export class GoogleMapsComponent {
                     lastName: employee.lastName,
                   }
 
-
                   this.markerEmployeesPositions.push(markerPosition);
                   j++
                 }
@@ -140,7 +164,6 @@ export class GoogleMapsComponent {
           i++;
           this.geocodeDepartments({address: departmentAddress}, this.geocoder, this.markerDepartmentsPositions, i);
      });
-
   }
 
   geocodeDepartments(request: google.maps.GeocoderRequest, geocoder: google.maps.Geocoder, markerPositions: google.maps.LatLng[], i: number) : void {
@@ -158,9 +181,9 @@ export class GoogleMapsComponent {
   }, 500 * i)
   }
 
-  openInfoWindow(marker: MapMarker, index: number) {
+  openEmployeeInfoWindow(marker: MapMarker, index: number) {
     let i = 0;
-    this.infoWindow?.forEach((window: MapInfoWindow) => {
+    this.employeeInfoWindow?.forEach((window: MapInfoWindow) => {
       if (index === i) {
         window.open(marker);
         i++;
@@ -171,13 +194,53 @@ export class GoogleMapsComponent {
     });
   }
 
+  openActionInfoWindow(marker: MapMarker, index: number, action: MapInfoWindow) {
+    let i = 0;
+
+    this.actionInfoWindow?.forEach(() => {
+      if (index === i) {
+        action.open(marker);
+        i++;
+      }
+      else {
+        i++;
+      }
+    });
+
+  }
 
   addMarker(event: google.maps.MapMouseEvent) {
     if (event.latLng != null) {
-      this.markerActionsPositions.push(event.latLng);
+
+      let action: Action = {
+        id: 0,
+        name: '',
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
+      }
+
+      this.departmentService.addAction(action)
+        .subscribe((successResponse) => {
+          this.snackbar.open('Action has been created', undefined, {
+            duration: 2000
+          });
+
+        })
+
+      this.departmentService.getActions().subscribe(
+        (successResponse) => {
+
+          action = successResponse[successResponse.length - 1]
+          let position = {
+            actionId: action.id,
+            name: action.name,
+            position: new google.maps.LatLng(action.lat, action.lng)
+          }
+
+          this.markerActionsPositions.push(position);
+        })
     }
   }
-
 
   moveMap(event: google.maps.MapMouseEvent) {
     if (event.latLng != null) {
@@ -191,6 +254,53 @@ export class GoogleMapsComponent {
     }
   }
 
+  onUpdate(actionId: number) {
 
+    var actionName = (<HTMLInputElement>document.getElementById("actionName")).value
 
+    if (typeof actionName !== 'undefined') {
+      this.actionName = actionName
+
+      let action = {
+        id: actionId,
+        name: actionName,
+        lat: 0,
+        lng: 0
+      }
+      console.log(action);
+
+      this.departmentService.updateAction(actionId, action)
+        .subscribe((successResponse) => {
+          this.snackbar.open('Action has been modified', undefined, {
+            duration: 2000
+          })
+        })
+    }
+    else {
+      this.actionName = undefined;
+    }
+  }
+
+  onDelete(actionId: number) : void {
+    this.departmentService.deleteAction(actionId)
+      .subscribe((successResponse) => {
+
+        this.snackbar.open('Action has been deleted', undefined, {
+          duration: 2000
+        })
+
+        let action;
+        this.markerActionsPositions.forEach(marker => {
+          if (marker.actionId == actionId){
+            action = marker;
+          }
+        })
+
+        if(action) {
+          let index = this.markerActionsPositions.indexOf(action);
+          this.markerActionsPositions.splice(index, 1);
+        }
+
+      })
+  }
 }
