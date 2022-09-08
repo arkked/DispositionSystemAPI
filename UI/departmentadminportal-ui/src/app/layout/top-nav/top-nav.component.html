@@ -5,6 +5,7 @@
         <mat-icon>home</mat-icon>
       </a>
       <a routerLink="/departments" mat-raised-button *ngIf="loggedin">Departments</a>
+      <button mat-raised-button *ngIf="loggedin" (click)="openDialog()">Actions</button>
     </div>
     <span class="example-spacer"></span>
     <button routerLink="/login" class="nav" mat-raised-button *ngIf="!loggedin">Sign In</button>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { TemplateBindingParseResult, ThisReceiver } from '@angular/compiler';
 import { Injectable, resolveForwardRef } from '@angular/core';
 import { from, Observable, switchMap, tap } from 'rxjs';
@@ -98,6 +98,16 @@ export class DepartmentService {
 
   }
 
+  assignEmployee(actionId: number, departmentId: number, employeeId: number) : Observable<Employee> {
+
+    var actionIdString = actionId.toString()
+    console.log(actionIdString);
+    console.log(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId);
+
+    return this.httpClient.post<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId, `"${actionIdString}"`, {
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    })
+  }
 
   getActions() : Observable<Action[]> {
     return this.httpClient.get<Action[]>(this.baseApiUrl + '/actions')

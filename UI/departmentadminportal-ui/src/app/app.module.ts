@@ -62,6 +62,9 @@ import { GoogleMapsComponent } from './departments/google-maps/google-maps.compo
 import { MapMarkerComponent } from './departments/map-marker/map-marker.component';
 import { MapInfoWindowComponent } from './departments/map-info-window/map-info-window.component';
 import { MarkerInfoComponent } from './departments/google-maps/marker-info/marker-info.component';
+import { DialogContentWindowComponent } from './dialog-content-window/dialog-content-window.component';
+import { DialogEmployeeWindowComponent } from './dialog-employee-window/dialog-employee-window.component';
+
 
 @NgModule({
   declarations: [
@@ -74,7 +77,9 @@ import { MarkerInfoComponent } from './departments/google-maps/marker-info/marke
     GoogleMapsComponent,
     MapMarkerComponent,
     MapInfoWindowComponent,
-    MarkerInfoComponent
+    MarkerInfoComponent,
+    DialogContentWindowComponent,
+    DialogEmployeeWindowComponent,
   ],
   imports: [
     FormsModule,

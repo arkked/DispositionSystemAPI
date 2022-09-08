@@ -55,6 +55,7 @@ namespace DispositionSystemAPI.Controllers
             return Ok(result);
         }
 
+
         [HttpDelete]
         public async Task<ActionResult> Delete([FromRoute] int departmentId)
         {
@@ -71,10 +72,12 @@ namespace DispositionSystemAPI.Controllers
 
 
         //TODO Query parameters
-        [HttpPost("{actionId}")]
-        public async Task<ActionResult> AssignToAction([FromBody] int actionId, int employeeId)
+        [HttpPost("{employeeId}")]
+        public async Task<ActionResult> AssignToAction([FromRoute] int employeeId, [FromBody] string actionId)
         {
-            await this.employeeRepository.AssignToAction(actionId, employeeId);
+            var actionInt = int.Parse(actionId);
+            
+            await this.employeeRepository.AssignToAction(actionInt, employeeId);
             return Ok();
         }
     }

@@ -1,9 +1,10 @@
-import { Component, ElementRef, Input, NgZone, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, switchMap, tap } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Action } from 'src/app/models/api-models/action.model';
 import { Department } from 'src/app/models/ui-models/department.model';
 import { Employee } from 'src/app/models/ui-models/employee.model';
@@ -26,8 +27,6 @@ export class GoogleMapsComponent {
 
   @ViewChildren(MapInfoWindow) employeeInfoWindow?: QueryList<MapInfoWindow>;
   @ViewChildren(MapInfoWindow) actionInfoWindow?: QueryList<MapInfoWindow>;
-
-
 
   @Input() departments: Department[] = [];
   actions: Action[] = [];
@@ -81,7 +80,8 @@ export class GoogleMapsComponent {
     lng: 0
   }
 
-  constructor(private ngZone: NgZone, private departmentService: DepartmentService, private snackbar: MatSnackBar,) { }
+  constructor(private ngZone: NgZone, private departmentService: DepartmentService,
+    private snackbar: MatSnackBar, private authService: AuthService) { }
 
   ngAfterViewInit(): void {
 
@@ -109,6 +109,9 @@ export class GoogleMapsComponent {
   }
 
   ngOnInit() {
+
+    this.authService.isUserAuthenticated();
+
     navigator.geolocation.getCurrentPosition((position) => {
       this.center = {
         lat: position.coords.latitude,
@@ -131,6 +134,7 @@ export class GoogleMapsComponent {
         })
       }
     );
+
   }
 
   ngOnChanges()
