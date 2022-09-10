@@ -28,5 +28,7 @@ namespace DispositionSystemAPI.Models
 
         public double Lng { get; set; }
 
+        public int? ActionId { get; set; }
+
     }
 }

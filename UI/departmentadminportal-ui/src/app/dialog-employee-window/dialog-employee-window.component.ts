@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { DepartmentService } from '../departments/department.service';
@@ -22,9 +22,9 @@ export class DialogEmployeeWindowComponent implements OnInit {
   token: string | null = localStorage.getItem("jwt");
   role: string = '';
 
-
   constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef,
-    private snackbar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: number) {
+    private snackbar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: number,
+    public dialogRef: MatDialogRef<DialogEmployeeWindowComponent>) {
 
      }
 
@@ -41,6 +41,12 @@ export class DialogEmployeeWindowComponent implements OnInit {
             this.departments = [...this.departments, department];
           }
          });
+
+         this.employees.forEach(employee => {
+            if (employee.actionId) {
+              this.employees = this.employees.filter(item => item !== employee);
+            }
+          });
 
          this.dataSource = new MatTableDataSource(this.employees);
 
@@ -66,6 +72,10 @@ export class DialogEmployeeWindowComponent implements OnInit {
       this.departmentService.assignEmployee(this.data, departmentId, employeeId).subscribe(
         (successResponse) => {
           this.employees = this.employees.filter(employee => employee.id !== employeeId)
+          this.snackbar.open('Employee has been assigned successfully', undefined, {
+            duration: 2000
+          });
+
           console.log(this.employees);
 
         }

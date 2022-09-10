@@ -18,12 +18,14 @@ export class ViewEmployeeComponent implements OnInit {
     id: 0,
     firstName: '',
     lastName: '',
+    email: '',
     city: '',
     street: '',
     postalCode: '',
     profileImageUrl: '',
     lat: 0,
-    lng: 0
+    lng: 0,
+    actionId: 0
   }
 
 

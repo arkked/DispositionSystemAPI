@@ -18,7 +18,7 @@
   <ng-container matColumnDef="delete">
     <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
     <td mat-cell *matCellDef="let element">
-      <a (click)="onDeleteAction(element.id)" *ngIf="isAuthorized">
+      <a [routerLink]="['/departments']" (click)="onDeleteAction(element.id)" *ngIf="isAuthorized">
         <mat-icon color="primary">delete</mat-icon>
       </a>
     </td>
@@ -62,7 +62,7 @@
             <ng-container matColumnDef="delete">
               <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
               <td mat-cell *matCellDef="let actionElement">
-                <a [routerLink]="['/departments']" *ngIf="isAuthorized">
+                <a *ngIf="isAuthorized" (click)="onUnassignEmployee(element.id)">
                   <mat-icon color="primary">delete</mat-icon>
                 </a>
               </td>

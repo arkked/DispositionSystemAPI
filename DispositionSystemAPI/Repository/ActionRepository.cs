@@ -21,7 +21,10 @@ namespace DispositionSystemAPI.Repository
 
         public async Task<List<ActionDto>> GetAll()
         {
-            var actions = await this.context.Actions.ToListAsync();
+            var actions = await this.context
+                .Actions
+                .Include(e => e.Employees)
+                .ToListAsync();
 
             var actionDtos = this.mapper.Map<List<ActionDto>>(actions);
 
@@ -44,6 +47,8 @@ namespace DispositionSystemAPI.Repository
 
             if (action == null) throw new NotFoundException("Action not found.");
 
+            action.Employees.ForEach(e => e.ActionId = null);
+            
             this.context.Remove(action);
             await this.context.SaveChangesAsync();
 

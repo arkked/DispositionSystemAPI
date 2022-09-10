@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChildren, QueryList, Output, EventEmitter, Input } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { DepartmentService } from '../departments/department.service';
 import { Action } from '../models/ui-models/action.model';
@@ -7,6 +7,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEmployeeWindowComponent } from '../dialog-employee-window/dialog-employee-window.component';
+import { Department } from '../models/ui-models/department.model';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class DialogContentWindowComponent implements OnInit {
 
   dataSource: MatTableDataSource<Action> = new MatTableDataSource<Action>([]);
   actions: Action[] = [];
+  @Input() departments: Department[] = [];
   columnsToDisplay = ['id', 'name', 'lat', 'lng'];
   innerDisplayedColumns = ['id', 'firstName', 'lastName', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'delete', 'expand'];
@@ -73,13 +75,30 @@ export class DialogContentWindowComponent implements OnInit {
 
   }
 
+  ngOnChanges() {
+    this.departmentService.getActions()
+    .subscribe(
+      (successResponse) => {
+        successResponse.forEach(action => {
+          if (action.employees && Array.isArray(action.employees) && action.employees.length){
+            this.actions = [...this.actions, {...action, employees: new MatTableDataSource(action.employees)}];
+          }
+          else {
+            this.actions = [...this.actions, action];
+          }
+        });
+
+        this.dataSource = new MatTableDataSource(this.actions);
+
+      }
+    )
+  }
+
   toggleRow(element: Action) {
     element.employees && (element.employees as MatTableDataSource<Employee>).data.length ?
     (this.expandedElement = this.expandedElement === element ? null : element) : null;
 
     this.cd.detectChanges();
-
-    //this.innerTables.forEach((table, index) => (table.dataSource as MatTableDataSource<Employee>).sort = this.innerSort.toArray()[index]);
   }
 
   onDeleteAction(actionId: number) : void {
@@ -103,8 +122,6 @@ export class DialogContentWindowComponent implements OnInit {
           this.actions.splice(index, 1);
         }
 
-
-
       })
   }
 
@@ -115,8 +132,35 @@ export class DialogContentWindowComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
+    })
+
+  }
+
+  onUnassignEmployee(employeeId: number) : void {
+    console.log("unassign action invoked with id", employeeId);
+
+    this.departmentService.getAllDepartments().subscribe(successResponse => {
+      successResponse.forEach(department => {
+        this.departments = [...this.departments, department];
+      })
+
+      console.log(this.departments);
+
+      this.departments.forEach(department => {
+        if (department.employees) {
+          (department.employees as Employee[]).forEach(employee => {
+            if (employee.id === employeeId) {
+              employee.actionId = undefined;
+              this.departmentService.updateEmployee(department.id, employeeId, employee).subscribe(successResponse => {
+                this.snackbar.open('Employee has been unassigned', undefined, {
+                  duration: 2000
+                });
+              })
+            }
+          })
+        }
+      })
 
     })
   }
-
 }

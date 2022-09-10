@@ -103,9 +103,15 @@ namespace DispositionSystemAPI.Repository
 
             employee.FirstName = dto.FirstName;
             employee.LastName = dto.LastName;
+            employee.Email = dto.Email;
             employee.Address = mapper.Map<EmployeeAddress>(dto);
             employee.Lat = dto.Lat;
             employee.Lng = dto.Lng;
+            if (dto.ActionId != 0)
+            {
+                employee.ActionId = dto.ActionId;
+            }
+            
 
             this.logger.LogInformation($"Employee with id: {employeeId} UPDATE action invoked. Updated data: '{employee.FirstName}' to '{dto.FirstName}', '{employee.LastName}' to '{dto.LastName}'");
             await this.context.SaveChangesAsync();
@@ -144,12 +150,17 @@ namespace DispositionSystemAPI.Repository
 
             if (user == null) throw new NotFoundException("User not found.");
 
+            var action = await this.context.Actions.FirstOrDefaultAsync(a => a.Id == actionId);
+
+            if (action == null) throw new NotFoundException("Action not found.");
+
+
             employee.ActionId = actionId;
-
+            action.Employees.Add(employee);
+            
             //TODO send notification here
-
+ 
             await this.context.SaveChangesAsync();
-
 
         }
 

@@ -141,6 +141,8 @@ export class DepartmentService {
   }
 
   callAfterUpdateEmployee(departmentId: number, employeeId: number) : Observable<Employee> {
+    console.log(this.employeeRequest);
+
     return this.httpClient.put<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId, this.employeeRequest);
   }
 

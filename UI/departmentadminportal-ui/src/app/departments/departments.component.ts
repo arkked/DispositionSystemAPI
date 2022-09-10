@@ -35,7 +35,7 @@ export class DepartmentsComponent implements OnInit {
   dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>([]);
   departments: Department[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode', 'contactEmail', 'contactNumber'];
-  innerDisplayedColumns = ['id', 'firstName', 'lastName', 'city', 'street', 'postalCode'];
+  innerDisplayedColumns = ['id', 'firstName', 'lastName', 'email', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
   expandedElement: Department | null;

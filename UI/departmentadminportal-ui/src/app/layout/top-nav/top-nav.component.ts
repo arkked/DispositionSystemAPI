@@ -16,13 +16,18 @@ import { Action } from 'src/app/models/ui-models/action.model';
 export class TopNavComponent implements OnInit {
 
   loggedin: boolean = false;
+  isAuthorized: boolean = false;
+  token: string | null = localStorage.getItem("jwt");
+  role: string = '';
 
-  constructor(private auth: AuthService, private jwtHelper: JwtHelperService,
-              public dialog: MatDialog) {
+  constructor(private auth: AuthService, private jwtHelper: JwtHelperService, public dialog: MatDialog)
+  {
     this.auth.loggedin.subscribe(v => this.loggedin = v);
-   }
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
 
   logOut()
   {

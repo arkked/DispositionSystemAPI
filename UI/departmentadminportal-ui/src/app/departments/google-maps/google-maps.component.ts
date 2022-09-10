@@ -72,12 +72,14 @@ export class GoogleMapsComponent {
     id: 0,
     firstName: '',
     lastName: '',
+    email: '',
     city: '',
     street: '',
     postalCode: '',
     profileImageUrl: '',
     lat: 0,
-    lng: 0
+    lng: 0,
+    actionId: 0
   }
 
   constructor(private ngZone: NgZone, private departmentService: DepartmentService,
@@ -286,6 +288,9 @@ export class GoogleMapsComponent {
   }
 
   onDelete(actionId: number) : void {
+    console.log("Delete action invoked with actionId: ", actionId);
+
+
     this.departmentService.deleteAction(actionId)
       .subscribe((successResponse) => {
 
