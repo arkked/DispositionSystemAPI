@@ -58,13 +58,13 @@ namespace DispositionSystemAPI.Repository
             if (department is null) throw new NotFoundException("Department not found");
 
             
-            var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
-            new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
+            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
+            //new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
-            if (!authorizationResult.Succeeded)
-            {
-                throw new ForbidException("Authorization failed");
-            }
+            //if (!authorizationResult.Succeeded)
+            //{
+            //    throw new ForbidException("Authorization failed");
+            //}
 
 
             this.context.DepartmentAddresses.Remove(address);

@@ -117,6 +117,7 @@ export class ViewEmployeeComponent implements OnInit {
       .subscribe(
         (successResponse) => {
 
+
           this.snackbar.open('Employee has been added succesfully', undefined, {
             duration: 2000
           });

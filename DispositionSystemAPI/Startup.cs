@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Authorization;
 using DispositionSystemAPI.Repository;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using DispositionSystemAPI.HubConfig;
 
 namespace DispositionSystemAPI
 {
@@ -94,19 +95,26 @@ namespace DispositionSystemAPI
             services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
             services.AddSwaggerGen();
+            
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
+
             services.AddCors(options =>
             {
+                var origins = Configuration["AllowedOrigins"].Split(";");
                 options.AddPolicy("FrontEndClient", builder =>
 
                     builder.AllowAnyMethod()
                         .AllowAnyHeader()
-                        .WithOrigins(Configuration["AllowedOrigins"])
+                        .WithOrigins(origins)
+                        .AllowCredentials()
                     );
             });
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DepartmentSeeder seeder)
         {
 
@@ -115,7 +123,7 @@ namespace DispositionSystemAPI
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "PrivateFiles/Images")),
                 RequestPath = "/api/PrivateFiles/Images"
-            });   //serwowanie plików na serwerze       
+            });     
             app.UseCors("FrontEndClient");
             seeder.Seed();
           
@@ -142,17 +150,8 @@ namespace DispositionSystemAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notifications");
             });
-
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
-
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseReactDevelopmentServer(npmScript: "start");
-            //    }
-            //});
         }
     }
 }

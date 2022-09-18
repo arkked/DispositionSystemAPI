@@ -88,7 +88,6 @@ export class DepartmentService {
   addEmployee(departmentId: number, employeeRequest: Employee) : Observable<Employee> {
 
     this.employeeRequest = employeeRequest;
-
     let employeeAddress = '';
     employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
     var employee = this.geocodeEmployees({address: employeeAddress});
@@ -149,6 +148,7 @@ export class DepartmentService {
   updateEmployee(departmentId: number, employeeId: number, employeeRequest: Employee) : Observable<Employee> {
 
     this.employeeRequest = employeeRequest;
+    console.log(this.employeeRequest);
 
     let employeeAddress = '';
     employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;

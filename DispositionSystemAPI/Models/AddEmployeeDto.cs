@@ -15,7 +15,7 @@ namespace DispositionSystemAPI.Models
 
         public string LastName { get; set; }
 
-       // public virtual Address Address { get; set; }
+        public string Email { get; set; }
 
         public int DepartmentId { get; set; }
 

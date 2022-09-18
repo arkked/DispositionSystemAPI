@@ -47,7 +47,11 @@ namespace DispositionSystemAPI.Repository
 
             if (action == null) throw new NotFoundException("Action not found.");
 
-            action.Employees.ForEach(e => e.ActionId = null);
+            if (action.Employees != null)
+            {
+                action.Employees.ForEach(e => e.ActionId = null);
+            }
+        
             
             this.context.Remove(action);
             await this.context.SaveChangesAsync();

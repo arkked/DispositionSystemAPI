@@ -2,9 +2,11 @@
 using DispositionSystemAPI.Authorization;
 using DispositionSystemAPI.Entities;
 using DispositionSystemAPI.Exceptions;
+using DispositionSystemAPI.HubConfig;
 using DispositionSystemAPI.Models;
 using DispositionSystemAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -20,15 +22,18 @@ namespace DispositionSystemAPI.Repository
         private readonly ILogger<EmployeeRepository> logger;
         private readonly IAuthorizationService authorizationService;
         private readonly IUserContextService userContextService;
+        private readonly IHubContext<NotificationHub, INotificationsHub> notificationsHubContext;
 
         public EmployeeRepository(DepartmentDbContext context, IMapper mapper, ILogger<EmployeeRepository> logger,
-            IAuthorizationService authorizationService, IUserContextService userContextService)
+            IAuthorizationService authorizationService, IUserContextService userContextService, IHubContext<NotificationHub, INotificationsHub> notificationsHubContext)
         {
             this.context = context;
             this.mapper = mapper;
             this.logger = logger;
             this.authorizationService = authorizationService;
             this.userContextService = userContextService;
+            this.notificationsHubContext = notificationsHubContext;
+
         }
 
         public async Task<int> Create(int departmentId, AddEmployeeDto dto)
@@ -107,10 +112,19 @@ namespace DispositionSystemAPI.Repository
             employee.Address = mapper.Map<EmployeeAddress>(dto);
             employee.Lat = dto.Lat;
             employee.Lng = dto.Lng;
-            if (dto.ActionId != 0)
+            if (dto.ActionId != null)
             {
                 employee.ActionId = dto.ActionId;
             }
+            else
+            {
+                var action = await this.context.Actions.FirstOrDefaultAsync(d => d.Id == employee.ActionId);
+
+                if (action == null) throw new NotFoundException("Action not found.");
+
+                action.Employees.Remove(employee);
+            }
+
             
 
             this.logger.LogInformation($"Employee with id: {employeeId} UPDATE action invoked. Updated data: '{employee.FirstName}' to '{dto.FirstName}', '{employee.LastName}' to '{dto.LastName}'");
@@ -156,14 +170,20 @@ namespace DispositionSystemAPI.Repository
 
 
             employee.ActionId = actionId;
+
+            if (action.Employees == null)
+            {
+                action.Employees = new List<Employee>();           
+            }
             action.Employees.Add(employee);
-            
+
             //TODO send notification here
- 
+
+            await this.notificationsHubContext.Clients.Client(user.ConnectionId).SendNotification(new Notification() { Id = action.Id, Content = action.Name});
+
             await this.context.SaveChangesAsync();
 
         }
-
 
         private async Task<Department> GetDepartmentById(int departmentId)
         {

@@ -8,6 +8,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { GoogleMap } from '@angular/google-maps';
 import { Action } from '../models/api-models/action.model';
+import { SignalRService } from './signal-r.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -44,7 +46,8 @@ export class DepartmentsComponent implements OnInit {
 
   filterString = '';
 
-  constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef) {
+  constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef,
+              public signalRService: SignalRService, private http: HttpClient) {
       this.expandedElement = null;
 
       if (this.token != null) {
@@ -83,8 +86,14 @@ export class DepartmentsComponent implements OnInit {
       },
       (errorResponse) => {
         console.log(errorResponse);
-      }
-      );
+      });
+
+      //this.startHttpRequest();
+      this.signalRService.startConnection();
+      this.signalRService.addTransferNotificationDataListener();
+
+
+
   }
 
   toggleRow(element: Department) {
@@ -98,5 +107,13 @@ export class DepartmentsComponent implements OnInit {
 
   filterDepartments(){
     this.dataSource.filter = this.filterString.trim().toLowerCase();
+  }
+
+  private startHttpRequest = () => {
+    this.http.get('https://localhost:5001/api/notifications')
+      .subscribe(successResponse => {
+        console.log(successResponse);
+
+      })
   }
 }

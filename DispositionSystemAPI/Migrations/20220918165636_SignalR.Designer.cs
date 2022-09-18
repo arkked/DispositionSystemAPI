@@ -4,14 +4,16 @@ using DispositionSystemAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DispositionSystemAPI.Migrations
 {
     [DbContext(typeof(DepartmentDbContext))]
-    partial class DepartmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220918165636_SignalR")]
+    partial class SignalR
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

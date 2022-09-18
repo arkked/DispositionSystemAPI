@@ -137,15 +137,10 @@ export class DialogContentWindowComponent implements OnInit {
   }
 
   onUnassignEmployee(employeeId: number) : void {
-    console.log("unassign action invoked with id", employeeId);
-
     this.departmentService.getAllDepartments().subscribe(successResponse => {
       successResponse.forEach(department => {
         this.departments = [...this.departments, department];
       })
-
-      console.log(this.departments);
-
       this.departments.forEach(department => {
         if (department.employees) {
           (department.employees as Employee[]).forEach(employee => {
