@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DispositionSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DispositionSystemAPI.Entities
@@ -23,6 +24,8 @@ namespace DispositionSystemAPI.Entities
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<Action> Actions { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

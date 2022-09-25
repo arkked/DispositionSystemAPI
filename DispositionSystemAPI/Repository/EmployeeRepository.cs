@@ -122,10 +122,17 @@ namespace DispositionSystemAPI.Repository
 
                 if (action == null) throw new NotFoundException("Action not found.");
 
-                action.Employees.Remove(employee);
-            }
+                var user = await this.context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email);
 
-            
+                if (user == null) throw new NotFoundException("User not found.");
+
+                var notification = await this.context.Notifications.FirstOrDefaultAsync(x => x.UserId == user.Id);
+
+                if (notification == null) throw new NotFoundException("Notification not found.");
+           
+                action.Employees.Remove(employee);
+                this.context.Notifications.Remove(notification);
+            }
 
             this.logger.LogInformation($"Employee with id: {employeeId} UPDATE action invoked. Updated data: '{employee.FirstName}' to '{dto.FirstName}', '{employee.LastName}' to '{dto.LastName}'");
             await this.context.SaveChangesAsync();
@@ -167,8 +174,7 @@ namespace DispositionSystemAPI.Repository
             var action = await this.context.Actions.FirstOrDefaultAsync(a => a.Id == actionId);
 
             if (action == null) throw new NotFoundException("Action not found.");
-
-
+        
             employee.ActionId = actionId;
 
             if (action.Employees == null)
@@ -178,6 +184,17 @@ namespace DispositionSystemAPI.Repository
             action.Employees.Add(employee);
 
             //TODO send notification here
+
+            var notification = new Notification { Content = action.Name, UserId = user.Id };
+            
+            await this.context.Notifications.AddAsync(notification);
+
+            if (user.Notifications == null)
+            {
+                user.Notifications = new List<Notification>();
+            }
+
+            user.Notifications.Add(notification);
 
             await this.notificationsHubContext.Clients.Client(user.ConnectionId).SendNotification(new Notification() { Id = action.Id, Content = action.Name});
 

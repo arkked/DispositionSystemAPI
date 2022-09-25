@@ -10,6 +10,7 @@ import { GoogleMap } from '@angular/google-maps';
 import { Action } from '../models/api-models/action.model';
 import { SignalRService } from './signal-r.service';
 import { HttpClient } from '@angular/common/http';
+import { NotificationModel } from '../models/api-models/notification.model';
 
 
 @Component({
@@ -35,13 +36,18 @@ export class DepartmentsComponent implements OnInit {
   token: string | null = localStorage.getItem("jwt");
 
   dataSource: MatTableDataSource<Department> = new MatTableDataSource<Department>([]);
+  notificationDataSource: MatTableDataSource<NotificationModel> = new MatTableDataSource<NotificationModel>([]);
   departments: Department[] = [];
+  notifications: NotificationModel[] = [];
   columnsToDisplay = ['id', 'name', 'description', 'category', 'city', 'street', 'postalCode', 'contactEmail', 'contactNumber'];
   innerDisplayedColumns = ['id', 'firstName', 'lastName', 'email', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
+
+  notificationColumnsToDisplay = ['id', 'content'];
   expandedElement: Department | null;
   role: string = '';
+  userId: number = 0;
   isAuthorized: boolean = false;
 
   filterString = '';
@@ -55,6 +61,7 @@ export class DepartmentsComponent implements OnInit {
         let decodedJwtJsonData = window.atob(jwtData);
         let decodedJwtData = JSON.parse(decodedJwtJsonData);
         this.role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+        this.userId = decodedJwtData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
         if (this.role === 'Manager' || this.role === 'Admin') {
           this.isAuthorized = true;
@@ -91,8 +98,13 @@ export class DepartmentsComponent implements OnInit {
       //this.startHttpRequest();
       this.signalRService.startConnection();
       this.signalRService.addTransferNotificationDataListener();
-
-
+      this.signalRService.getNotifications(this.userId).subscribe(
+        (successResponse) => {
+          console.log(successResponse);
+          this.notifications = successResponse;
+          this.notificationDataSource = new MatTableDataSource(this.notifications);
+        }
+      );
 
   }
 

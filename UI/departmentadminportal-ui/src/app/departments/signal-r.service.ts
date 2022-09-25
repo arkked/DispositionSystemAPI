@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
 import { NotificationModel } from '../models/api-models/notification.model';
@@ -7,11 +8,13 @@ import { NotificationModel } from '../models/api-models/notification.model';
 })
 export class SignalRService {
 
-  public data: Notification[] = [];
+  public data: NotificationModel[] = [];
 
   private hubConnection!: signalR.HubConnection;
 
   token: string | null= localStorage.getItem("jwt");
+
+  constructor(private httpClient: HttpClient) { }
 
   options: signalR.IHttpConnectionOptions = {
     accessTokenFactory: () => {
@@ -34,7 +37,14 @@ export class SignalRService {
   public addTransferNotificationDataListener = () => {
     this.hubConnection.on('SendNotification', (message: NotificationModel) => {
       console.log(message);
+      this.data.push(message);
 
     })
+  }
+
+  public getNotifications(userId: number) {
+    console.log(this.data);
+
+    return this.httpClient.get<NotificationModel[]>('https://localhost:5001/api/notifications/' + userId);
   }
 }
