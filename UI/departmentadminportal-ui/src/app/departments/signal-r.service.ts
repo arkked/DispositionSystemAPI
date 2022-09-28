@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr'
 import { NotificationModel } from '../models/api-models/notification.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class SignalRService {
 
   token: string | null= localStorage.getItem("jwt");
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private toastr: ToastrService) { }
 
   options: signalR.IHttpConnectionOptions = {
     accessTokenFactory: () => {
@@ -37,6 +38,7 @@ export class SignalRService {
   public addTransferNotificationDataListener = () => {
     this.hubConnection.on('SendNotification', (message: NotificationModel) => {
       console.log(message);
+      this.toastr.info("You have been assigned to action recently");
       this.data.push(message);
 
     })

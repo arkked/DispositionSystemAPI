@@ -64,6 +64,7 @@ import { MapInfoWindowComponent } from './departments/map-info-window/map-info-w
 import { MarkerInfoComponent } from './departments/google-maps/marker-info/marker-info.component';
 import { DialogContentWindowComponent } from './dialog-content-window/dialog-content-window.component';
 import { DialogEmployeeWindowComponent } from './dialog-employee-window/dialog-employee-window.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -134,7 +135,8 @@ import { DialogEmployeeWindowComponent } from './dialog-employee-window/dialog-e
       }
     }),
 
-    GoogleMapsModule
+    GoogleMapsModule,
+    ToastrModule.forRoot()
 
   ],
   schemas: [
