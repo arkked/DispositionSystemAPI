@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEmployeeWindowComponent } from '../dialog-employee-window/dialog-employee-window.component';
 import { Department } from '../models/ui-models/department.model';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class DialogContentWindowComponent implements OnInit {
   dataSource: MatTableDataSource<Action> = new MatTableDataSource<Action>([]);
   actions: Action[] = [];
   @Input() departments: Department[] = [];
-  columnsToDisplay = ['id', 'name', 'lat', 'lng'];
+  columnsToDisplay = ['id', 'name', 'description', 'lat', 'lng'];
   innerDisplayedColumns = ['id', 'firstName', 'lastName', 'city', 'street', 'postalCode'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'delete', 'expand'];
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'delete'];
@@ -40,7 +41,8 @@ export class DialogContentWindowComponent implements OnInit {
 
 
   constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef,
-              private snackbar: MatSnackBar, public dialog: MatDialog) {
+              private snackbar: MatSnackBar, public dialog: MatDialog,
+              private toastr: ToastrService) {
     this.expandedElement = null;
     if (this.token != null) {
       let jwtData = this.token.split('.')[1];
@@ -122,12 +124,15 @@ export class DialogContentWindowComponent implements OnInit {
           this.actions.splice(index, 1);
         }
 
+      },
+      (errorResponse) => {
+        this.toastr.error("You have to unassign employees first");
       })
   }
 
-  openEmployeeDialog(actionId: number) {
+  openEmployeeDialog(action: Action) {
     const dialogRef = this.dialog.open(DialogEmployeeWindowComponent, {
-      data: actionId
+      data: action
     });
 
     dialogRef.afterClosed().subscribe(result => {

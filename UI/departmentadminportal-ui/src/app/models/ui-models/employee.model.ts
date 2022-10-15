@@ -7,6 +7,7 @@ export interface Employee {
   street: string,
   postalCode: string,
   profileImageUrl: string,
+  distance: number,
   lat: number,
   lng: number,
   actionId: number | undefined;

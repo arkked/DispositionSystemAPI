@@ -65,6 +65,7 @@ namespace DispositionSystemAPI.Repository
             if (action == null) throw new NotFoundException("Action not found.");
 
             action.Name = dto.Name;
+            action.Description = dto.Description;
 
             await this.context.SaveChangesAsync();
 

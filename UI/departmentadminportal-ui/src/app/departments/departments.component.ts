@@ -44,7 +44,8 @@ export class DepartmentsComponent implements OnInit {
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'edit', 'expand'];
   innerDisplayedColumnsWithExpand = [...this.innerDisplayedColumns, 'edit'];
 
-  notificationColumnsToDisplay = ['id', 'content'];
+  notificationColumnsToDisplay = ['id', 'name', 'description'];
+  notificationColumnsToDisplayWithShow = [...this.notificationColumnsToDisplay, 'show'];
   expandedElement: Department | null;
   role: string = '';
   userId: number = 0;
@@ -127,5 +128,11 @@ export class DepartmentsComponent implements OnInit {
         console.log(successResponse);
 
       })
+  }
+
+  showOnMap(notification: NotificationModel) {
+
+    var url = "https://www.google.com/maps/search/?api=1&query=" + notification.lat + "+" + notification.lng;
+    window.open(url, "_blank");
   }
 }

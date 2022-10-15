@@ -185,7 +185,7 @@ namespace DispositionSystemAPI.Repository
 
             //TODO send notification here
 
-            var notification = new Notification { Content = action.Name, UserId = user.Id };
+            var notification = new Notification { Name = action.Name, Description = action.Description, Lat = action.Lat, Lng = action.Lng, UserId = user.Id };
             
             await this.context.Notifications.AddAsync(notification);
 
@@ -196,7 +196,7 @@ namespace DispositionSystemAPI.Repository
 
             user.Notifications.Add(notification);
 
-            await this.notificationsHubContext.Clients.Client(user.ConnectionId).SendNotification(new Notification() { Id = action.Id, Content = action.Name});
+            await this.notificationsHubContext.Clients.Client(user.ConnectionId).SendNotification(new Notification() { Id = action.Id, Name = action.Name, Lat = action.Lat, Lng = action.Lng, Description = action.Description});
 
             await this.context.SaveChangesAsync();
 

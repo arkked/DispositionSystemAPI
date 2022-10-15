@@ -1,5 +1,8 @@
 export interface NotificationModel {
   id: number,
   userId: number,
-  content: string
+  name: string,
+  description: string,
+  lat: number,
+  lng: number
 }

@@ -3,6 +3,7 @@ import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Action } from 'src/app/models/api-models/action.model';
@@ -77,13 +78,15 @@ export class GoogleMapsComponent {
     street: '',
     postalCode: '',
     profileImageUrl: '',
+    distance: 0,
     lat: 0,
     lng: 0,
     actionId: 0
   }
 
   constructor(private ngZone: NgZone, private departmentService: DepartmentService,
-    private snackbar: MatSnackBar, private authService: AuthService) { }
+    private snackbar: MatSnackBar, private authService: AuthService,
+    private toastr: ToastrService) { }
 
   ngAfterViewInit(): void {
 
@@ -221,6 +224,7 @@ export class GoogleMapsComponent {
       let action: Action = {
         id: 0,
         name: '',
+        description: '',
         lat: event.latLng.lat(),
         lng: event.latLng.lng()
       }
@@ -263,6 +267,7 @@ export class GoogleMapsComponent {
   onUpdate(actionId: number) {
 
     var actionName = (<HTMLInputElement>document.getElementById("actionName")).value
+    var actionDescription = (<HTMLInputElement>document.getElementById("actionDescription")).value
 
     if (typeof actionName !== 'undefined') {
       this.actionName = actionName
@@ -270,6 +275,7 @@ export class GoogleMapsComponent {
       let action = {
         id: actionId,
         name: actionName,
+        description: actionDescription,
         lat: 0,
         lng: 0
       }
@@ -310,6 +316,10 @@ export class GoogleMapsComponent {
           this.markerActionsPositions.splice(index, 1);
         }
 
+      },
+      (errorResponse) => {
+        console.log(errorResponse);
+        this.toastr.error("You have to unassign employees first");
       })
   }
 }

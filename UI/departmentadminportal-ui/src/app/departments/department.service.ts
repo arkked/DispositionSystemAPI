@@ -125,7 +125,8 @@ export class DepartmentService {
 
     const updateAction: UpdateActionRequest = {
       id: actionRequest.id,
-      name: actionRequest.name
+      name: actionRequest.name,
+      description: actionRequest.description
     }
     console.log(updateAction);
 

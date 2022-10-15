@@ -52,7 +52,7 @@
       <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
         <div class="inner-table mat-elevation-z8" *ngIf="expandedElement">
           <!-- Change ADD EMPLOYEE -->
-          <button mat-raised-button color="primary" class="ml-1" *ngIf="isAuthorized" (click)="openEmployeeDialog(element.id)">Assign Employee</button>
+          <button mat-raised-button color="primary" class="ml-1" *ngIf="isAuthorized" (click)="openEmployeeDialog(element)">Assign Employee</button>
           <table #innerTables mat-table #innerSort="matSort" [dataSource]="element.employees" matSort>
             <ng-container matColumnDef="{{innerColumn}}" *ngFor="let innerColumn of innerDisplayedColumns">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>{{innerColumn[0].toUpperCase() + innerColumn.substr(1)}}</th>

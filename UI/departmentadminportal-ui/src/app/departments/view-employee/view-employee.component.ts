@@ -23,6 +23,7 @@ export class ViewEmployeeComponent implements OnInit {
     street: '',
     postalCode: '',
     profileImageUrl: '',
+    distance: 0,
     lat: 0,
     lng: 0,
     actionId: 0

@@ -16,20 +16,47 @@
       <app-google-maps [departments]="departments"></app-google-maps>
     </div>
     <div *ngIf="!isAuthorized">
-      <table mat-table [dataSource]="notificationDataSource" class="mat-elevation-z8">
+      <table
+        mat-table
+        matSort
+        [dataSource]="notificationDataSource"
+        class="mat-elevation-z8">
 
-        <ng-container matColumnDef="id">
+        <ng-container matColumnDef="{{ column }}" *ngFor="let column of notificationColumnsToDisplay">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column[0].toUpperCase() + column.substr(1) }}</th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="show">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            &nbsp;
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="showOnMap(element)" mat-raised-button color="primary">
+              Show On Map
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> Id </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="content">
-          <th mat-header-cell *matHeaderCellDef> Content </th>
-          <td mat-cell *matCellDef="let element"> {{element.content}} </td>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{ element.name}} </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="notificationColumnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: notificationColumnsToDisplay;"></tr>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container> -->
+
+
+
+        <tr mat-header-row *matHeaderRowDef="notificationColumnsToDisplayWithShow"></tr>
+        <tr mat-row *matRowDef="let row; columns: notificationColumnsToDisplayWithShow;"></tr>
       </table>
     </div>
 
