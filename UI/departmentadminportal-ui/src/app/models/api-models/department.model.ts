@@ -12,4 +12,6 @@ export interface Department {
   contactEmail: string,
   contactNumber: string,
   employees?: Employee[];
+  lat: number,
+  lng: number
 }

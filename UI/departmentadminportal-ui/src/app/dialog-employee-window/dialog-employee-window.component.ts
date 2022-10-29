@@ -27,9 +27,7 @@ export class DialogEmployeeWindowComponent implements OnInit {
 
   constructor(private departmentService: DepartmentService, private cd: ChangeDetectorRef,
     private snackbar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: Action,
-    public dialogRef: MatDialogRef<DialogEmployeeWindowComponent>) {
-
-     }
+    public dialogRef: MatDialogRef<DialogEmployeeWindowComponent>) {}
 
   ngOnInit(): void {
     this.departmentService.getAllDepartments()
@@ -51,13 +49,11 @@ export class DialogEmployeeWindowComponent implements OnInit {
             }
 
             employee.distance = Math.round(this.calculateDistance(this.data, employee) * 10) / 10;
-
           });
 
           this.employees.sort((a, b) => a.distance - b.distance)
 
           this.dataSource = new MatTableDataSource(this.employees);
-
       }
     )
   }
@@ -98,13 +94,8 @@ export class DialogEmployeeWindowComponent implements OnInit {
           this.snackbar.open('Employee has been assigned successfully', undefined, {
             duration: 2000
           });
-
-          console.log(this.employees);
-
         }
       )
     }
-
   }
-
 }

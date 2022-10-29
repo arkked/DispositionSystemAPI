@@ -40,5 +40,4 @@ export class LoginComponent {
   {
     this.auth.isUserAuthenticated();
   }
-
 }

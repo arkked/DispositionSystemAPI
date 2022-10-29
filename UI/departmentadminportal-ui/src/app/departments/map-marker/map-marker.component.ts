@@ -5,12 +5,9 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './map-marker.component.html',
   styleUrls: ['./map-marker.component.css']
 })
-export class MapMarkerComponent implements OnInit {
+export class MapMarkerComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   center: google.maps.LatLngLiteral = {lat: 52.91722430065678, lng: 18.792917547308};
   zoom = 6;

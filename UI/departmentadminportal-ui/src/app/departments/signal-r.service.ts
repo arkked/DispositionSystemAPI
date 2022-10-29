@@ -40,7 +40,6 @@ export class SignalRService {
       console.log(message);
       this.toastr.info("You have been assigned to action recently");
       this.data.push(message);
-
     })
   }
 

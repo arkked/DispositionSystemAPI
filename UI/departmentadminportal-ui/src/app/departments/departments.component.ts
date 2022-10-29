@@ -12,7 +12,6 @@ import { SignalRService } from './signal-r.service';
 import { HttpClient } from '@angular/common/http';
 import { NotificationModel } from '../models/api-models/notification.model';
 
-
 @Component({
   selector: 'app-departments',
   templateUrl: './departments.component.html',
@@ -67,7 +66,6 @@ export class DepartmentsComponent implements OnInit {
         if (this.role === 'Manager' || this.role === 'Admin') {
           this.isAuthorized = true;
         }
-
       }
    }
 
@@ -96,7 +94,6 @@ export class DepartmentsComponent implements OnInit {
         console.log(errorResponse);
       });
 
-      //this.startHttpRequest();
       this.signalRService.startConnection();
       this.signalRService.addTransferNotificationDataListener();
       this.signalRService.getNotifications(this.userId).subscribe(
@@ -106,7 +103,6 @@ export class DepartmentsComponent implements OnInit {
           this.notificationDataSource = new MatTableDataSource(this.notifications);
         }
       );
-
   }
 
   toggleRow(element: Department) {

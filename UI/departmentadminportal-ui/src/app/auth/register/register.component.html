@@ -84,10 +84,14 @@
         </div>
         <div class="row">
           <div class="col-xs-6">
-          <mat-form-field appearance="outline">
-            <mat-label>Date Of Birth</mat-label>
-            <input type="text" matInput [(ngModel)]="formData.dateOfBirth" name="dateOfBirth">
-          </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Date Of Birth</mat-label>
+              <input matInput [matDatepicker]="picker" [(ngModel)]="formData.dateOfBirth" name="dateOfBirth">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
           </div>
         </div>
 

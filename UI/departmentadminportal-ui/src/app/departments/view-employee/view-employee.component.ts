@@ -29,8 +29,6 @@ export class ViewEmployeeComponent implements OnInit {
     actionId: 0
   }
 
-
-
   isNewEmployee = true;
   header = '';
   displayProfileImageUrl = '';
@@ -41,7 +39,6 @@ export class ViewEmployeeComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
-
     this.route.paramMap.subscribe(
       (params) => {
 
@@ -52,7 +49,6 @@ export class ViewEmployeeComponent implements OnInit {
 
           this.isNewEmployee = false;
           this.header = 'Edit Employee';
-
 
           this.departmentService.getEmployeeById(this.departmentId, this.employeeId)
           .subscribe(
@@ -117,8 +113,6 @@ export class ViewEmployeeComponent implements OnInit {
     this.departmentService.addEmployee(this.departmentId, this.employee)
       .subscribe(
         (successResponse) => {
-
-
           this.snackbar.open('Employee has been added succesfully', undefined, {
             duration: 2000
           });

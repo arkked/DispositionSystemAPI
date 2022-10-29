@@ -1,19 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { DepartmentService } from 'src/app/departments/department.service';
 import { DialogContentWindowComponent } from 'src/app/dialog-content-window/dialog-content-window.component';
-import { Action } from 'src/app/models/ui-models/action.model';
 
 @Component({
   selector: 'app-top-nav',
   templateUrl: './top-nav.component.html',
   styleUrls: ['./top-nav.component.css']
 })
-export class TopNavComponent implements OnInit {
+export class TopNavComponent {
 
   loggedin: boolean = false;
   isAuthorized: boolean = false;
@@ -22,11 +18,8 @@ export class TopNavComponent implements OnInit {
 
   constructor(private auth: AuthService, private jwtHelper: JwtHelperService, public dialog: MatDialog)
   {
+    this.auth.isUserAuthenticated();
     this.auth.loggedin.subscribe(v => this.loggedin = v);
-  }
-
-  ngOnInit(): void {
-
   }
 
   logOut()
@@ -40,9 +33,7 @@ export class TopNavComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-
     })
-
   }
 }
 

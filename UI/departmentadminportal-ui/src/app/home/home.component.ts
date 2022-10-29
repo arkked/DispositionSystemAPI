@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject } from 'rxjs';
+import { Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -26,5 +23,4 @@ export class HomeComponent {
       this.fullName = decodedJwtData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
     }
    }
-
 }

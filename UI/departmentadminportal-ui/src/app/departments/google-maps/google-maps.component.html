@@ -2,6 +2,7 @@
 <div class="form-group">
   <input type="text" class="addressInput" (keydown.enter)="$event.preventDefault()" placeholder="Search location" #search>
 </div>
+
 <google-map height="50vh"
             width="90vw"
             [center]="center"
@@ -9,45 +10,62 @@
             [options]="mapOptions"
             (mapClick)="addMarker($event)">
 
-<map-marker *ngFor="let markerPosition of markerDepartmentsPositions"
-[position]="markerPosition"
-[options]="markerDepartmentOptions">
-</map-marker>
+  <map-marker *ngFor="let markerPosition of markerDepartmentsPositions"
+  [position]="markerPosition"
+  [options]="markerDepartmentOptions">
+  </map-marker>
 
-<map-marker #marker = "mapMarker" *ngFor="let markerPosition of markerEmployeesPositions; let i = index"
-[position]="markerPosition.position"
-[options]="markerEmployeeOptions"
-(mapClick)="openEmployeeInfoWindow(marker, i)">
+  <map-marker #marker = "mapMarker" *ngFor="let markerPosition of markerEmployeesPositions; let i = index"
+  [position]="markerPosition.position"
+  [options]="markerEmployeeOptions"
+  (mapClick)="openEmployeeInfoWindow(marker, i)">
+    <map-info-window>
+      <h3>
+        <p>Id: {{markerPosition.employeeId}} </p>
+        <p> {{markerPosition.firstName}} {{markerPosition.lastName}}</p>
+        <div class="row center-xs">
+          <div class="image-container">
+            <img [src]="markerPosition.profileImgPath" alt="Profile Image">
+          </div>
+        </div>
+      </h3>
+    </map-info-window>
+  </map-marker>
 
-<map-info-window>
-
-<h3>Id: {{markerPosition.employeeId}}, {{markerPosition.firstName}} {{markerPosition.lastName}}</h3>
-
-
-</map-info-window>
-</map-marker>
-
-<map-marker #marker2 = "mapMarker" *ngFor="let markerPosition of markerActionsPositions; let i = index"
+  <map-marker #marker2 = "mapMarker" *ngFor="let markerPosition of markerActionsPositions; let i = index"
             [position]="markerPosition.position"
             [options]="markerActionOptions"
             (mapClick)="openActionInfoWindow(marker2, i, actionWindow)">
 
-            <map-info-window #actionWindow = "mapInfoWindow">
+    <map-info-window #actionWindow = "mapInfoWindow">
 
-              <h3 *ngIf="markerPosition.name">{{markerPosition.name}}</h3>
-                <input type="text" id="actionName" name="actionName" placeholder="Enter name" *ngIf="!markerPosition.name" #actionName>
-                <input type="text" id="actionDescription" name="actionDescription" placeholder="Description" *ngIf="!markerPosition.name" #actionDescription>
-                <h3>Lat: {{markerPosition.position.lat()}} Lng: {{markerPosition.position.lng()}}</h3>
-                <div class="row between-xs">
-                  <button mat-raised-button color="primary" (click)="onUpdate(markerPosition.actionId)" *ngIf="!markerPosition.name">Save</button>
-                  <button mat-raised-button color="warn" (click)="onDelete(markerPosition.actionId)">Delete</button>
-                </div>
-            </map-info-window>
+      <h3 *ngIf="markerPosition.name"> <b>Action name:</b> {{markerPosition.name}}</h3>
+        <!-- <input type="text" id="actionName" name="actionName" placeholder="Enter name" *ngIf="!markerPosition.name" #actionName> <br><br>
+        <input type="text" id="actionDescription" name="actionDescription" placeholder="Description" *ngIf="!markerPosition.name" #actionDescription> <br><br> -->
 
-            </map-marker>
+        <mat-form-field appearance="outline" *ngIf="!markerPosition.name">
+          <mat-label>Action Name</mat-label>
+          <input type="text" matInput id="actionName" name="actionName" ngModel class="form-control" placeholder="Enter Name"
+          autofocus #actionName>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="outline" *ngIf="!markerPosition.name">
+          <mat-label>Description</mat-label>
+          <textarea type="text" matInput id="actionDescription" name="actionDescription" ngModel class="form-control" placeholder="Description"
+          autofocus #actionDescription></textarea>
+        </mat-form-field>
 
+        <h3>
+          <p><b>Lat:</b> {{markerPosition.position.lat()}}</p>
+          <p><b>Lng:</b> {{markerPosition.position.lng()}}</p>
+        </h3>
+        <div class="row between-xs" *ngIf="!markerPosition.name">
+          <button mat-raised-button color="primary" (click)="onUpdate(markerPosition.actionId)">Save</button>
+          <button mat-raised-button color="warn" (click)="onDelete(markerPosition.actionId)">Delete</button>
+        </div>
+        <div class="row center-xs" *ngIf="markerPosition.name">
+          <button mat-raised-button color="warn" (click)="onDelete(markerPosition.actionId)">Delete</button>
+        </div>
+    </map-info-window>
+  </map-marker>
 </google-map>
-
-<!--
-(mapClick)="moveMap($event)"
-(mapMousemove)="move($event)" -->

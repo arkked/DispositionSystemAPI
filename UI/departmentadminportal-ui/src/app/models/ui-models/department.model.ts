@@ -11,5 +11,7 @@ export interface Department {
   postalCode: string,
   contactEmail: string,
   contactNumber: string,
+  lat: number,
+  lng: number,
   employees?: Employee[] | MatTableDataSource<Employee>;
 }

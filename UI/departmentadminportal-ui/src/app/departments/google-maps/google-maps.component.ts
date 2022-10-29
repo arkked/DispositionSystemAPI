@@ -1,10 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Action } from 'src/app/models/api-models/action.model';
 import { Department } from 'src/app/models/ui-models/department.model';
@@ -86,7 +84,7 @@ export class GoogleMapsComponent {
 
   constructor(private ngZone: NgZone, private departmentService: DepartmentService,
     private snackbar: MatSnackBar, private authService: AuthService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService) {}
 
   ngAfterViewInit(): void {
 
@@ -114,7 +112,6 @@ export class GoogleMapsComponent {
   }
 
   ngOnInit() {
-
     this.authService.isUserAuthenticated();
 
     navigator.geolocation.getCurrentPosition((position) => {
@@ -131,6 +128,7 @@ export class GoogleMapsComponent {
           {
             actionId: action.id,
             name: action.name,
+            description: action.description,
             position: new google.maps.LatLng(action.lat,action.lng)
 
           }
@@ -139,14 +137,10 @@ export class GoogleMapsComponent {
         })
       }
     );
-
   }
 
   ngOnChanges()
   {
-     let i = 1;
-     let j = 1;
-
      this.departments.forEach(department => {
         let departmentAddress = '';
         departmentAddress += department.street + ", " + department.postalCode + " " + department.city;
@@ -160,39 +154,23 @@ export class GoogleMapsComponent {
                   let markerPosition = {
                     employeeId: employee.id,
                     position: new google.maps.LatLng(employee.lat, employee.lng),
+                    profileImgPath: employee.profileImageUrl ? this.departmentService.getImagePath(employee.profileImageUrl) : '/assets/default-user.png',
                     firstName: employee.firstName,
                     lastName: employee.lastName,
                   }
 
                   this.markerEmployeesPositions.push(markerPosition);
-                  j++
                 }
               )
             }
 
-          i++;
-          this.geocodeDepartments({address: departmentAddress}, this.geocoder, this.markerDepartmentsPositions, i);
+          this.markerDepartmentsPositions.push(new google.maps.LatLng(department.lat, department.lng));
      });
-  }
-
-  geocodeDepartments(request: google.maps.GeocoderRequest, geocoder: google.maps.Geocoder, markerPositions: google.maps.LatLng[], i: number) : void {
-    setTimeout(function() {
-      let marker = new google.maps.Marker();
-
-      geocoder.geocode(request).then((result) => {
-      const { results } = result;
-
-      marker.setPosition(results[0].geometry.location);
-      markerPositions.push(marker.getPosition() as google.maps.LatLng);
-      return results;
-
-    })
-  }, 500 * i)
   }
 
   openEmployeeInfoWindow(marker: MapMarker, index: number) {
     let i = 0;
-    this.employeeInfoWindow?.forEach((window: MapInfoWindow) => {
+    this.employeeInfoWindow!.forEach((window: MapInfoWindow) => {
       if (index === i) {
         window.open(marker);
         i++;
@@ -215,7 +193,6 @@ export class GoogleMapsComponent {
         i++;
       }
     });
-
   }
 
   addMarker(event: google.maps.MapMouseEvent) {
@@ -244,6 +221,7 @@ export class GoogleMapsComponent {
           let position = {
             actionId: action.id,
             name: action.name,
+            description: action.description,
             position: new google.maps.LatLng(action.lat, action.lng)
           }
 
@@ -294,9 +272,6 @@ export class GoogleMapsComponent {
   }
 
   onDelete(actionId: number) : void {
-    console.log("Delete action invoked with actionId: ", actionId);
-
-
     this.departmentService.deleteAction(actionId)
       .subscribe((successResponse) => {
 

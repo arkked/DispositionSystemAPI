@@ -21,7 +21,9 @@ export class ViewDepartmentComponent implements OnInit {
     street: '',
     postalCode: '',
     contactEmail: '',
-    contactNumber: ''
+    contactNumber: '',
+    lat: 0,
+    lng: 0
   }
 
   isNewDepartment = true;

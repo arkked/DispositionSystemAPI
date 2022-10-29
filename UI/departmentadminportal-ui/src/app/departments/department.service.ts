@@ -1,16 +1,11 @@
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
-import { TemplateBindingParseResult, ThisReceiver } from '@angular/compiler';
-import { Injectable, resolveForwardRef } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { Action } from '../models/api-models/action.model';
 import { AddActionRequest } from '../models/api-models/add-action-request.model';
-import { AddDepartmentRequest } from '../models/api-models/add-department-request.model';
-import { AddEmployeeRequest } from '../models/api-models/add-employee-request.model';
 import { Department } from '../models/api-models/department.model';
 import { Employee } from '../models/api-models/employee.model';
 import { UpdateActionRequest } from '../models/api-models/update-action-request.model';
-import { UpdateDepartmentRequest } from '../models/api-models/update-department-request';
-import { UpdateEmployeeRequest } from '../models/api-models/update-employee-request';
 
 
 @Injectable({
@@ -23,6 +18,7 @@ export class DepartmentService {
   geocoder = new google.maps.Geocoder();
 
   employeeRequest!: Employee;
+  departmentRequest!: Department;
   position!: google.maps.LatLng[];
 
   constructor(private httpClient: HttpClient) { }
@@ -39,40 +35,48 @@ export class DepartmentService {
     return this.httpClient.get<Employee>(this.baseApiUrl + '/department/' + departmentId + '/employee/' + employeeId);
   }
 
+  callAfterUpdateDepartment(departmentId: number) : Observable<Department> {
+    console.log(this.departmentRequest);
+
+    return this.httpClient.put<Department>(this.baseApiUrl + '/department/' + departmentId, this.departmentRequest);
+  }
+
   updateDepartment(departmentId: number, departmentRequest: Department): Observable<Department> {
-    const updateDepartmentRequest: UpdateDepartmentRequest = {
-      name: departmentRequest.name,
-      description: departmentRequest.description,
-      category: departmentRequest.category,
-      city: departmentRequest.city,
-      street: departmentRequest.street,
-      postalCode: departmentRequest.postalCode,
-      contactEmail: departmentRequest.contactEmail,
-      contactNumber: departmentRequest.contactNumber
-    }
 
-    return this.httpClient.put<Department>(this.baseApiUrl + '/department/' + departmentId, updateDepartmentRequest);
+    this.departmentRequest = departmentRequest;
 
+    let departmentAddress = '';
+    departmentAddress += this.departmentRequest.street + ", " + this.departmentRequest.city;
+    var department = this.geocodeDepartment({address: departmentAddress});
+
+    return department.pipe(tap(departmentResponse => this.setUpdatedDepartment(departmentResponse)),
+      switchMap(_=>this.callAfterUpdateDepartment(departmentId)));
   }
 
   deleteDepartment(departmentId: number) : Observable<Department>{
     return this.httpClient.delete<Department>(this.baseApiUrl + "/department/" + departmentId);
   }
 
+  setUpdatedDepartment(departmentResponse: Department) {
+    if (departmentResponse) {
+      this.departmentRequest= departmentResponse;
+    }
+  }
+
+  callAfterAddUpdatedDepartment() : Observable<Department> {
+    return this.httpClient.post<Department>(this.baseApiUrl + '/department', this.departmentRequest);
+  }
+
   addDepartment(departmentRequest: Department) : Observable<Department> {
 
-    const addDepartmentRequest: AddDepartmentRequest = {
-      name: departmentRequest.name,
-      description: departmentRequest.description,
-      category: departmentRequest.category,
-      city: departmentRequest.city,
-      street: departmentRequest.street,
-      postalCode: departmentRequest.postalCode,
-      contactEmail: departmentRequest.contactEmail,
-      contactNumber: departmentRequest.contactNumber
-    }
+    this.departmentRequest = departmentRequest;
+    let departmentAddress = '';
+    departmentAddress += departmentRequest.street + ", " + departmentRequest.city;
+    var department = this.geocodeDepartment({address: departmentAddress});
 
-    return this.httpClient.post<Department>(this.baseApiUrl + '/department', addDepartmentRequest);
+    console.log(department);
+    return department.pipe(tap(departmentResponse => this.setUpdatedDepartment(departmentResponse)),
+    switchMap(_=>this.callAfterAddUpdatedDepartment()))
   }
 
   setUpdatedEmployee(employeeResponse: Employee) {
@@ -90,11 +94,10 @@ export class DepartmentService {
     this.employeeRequest = employeeRequest;
     let employeeAddress = '';
     employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
-    var employee = this.geocodeEmployees({address: employeeAddress});
+    var employee = this.geocodeEmployee({address: employeeAddress});
 
     return employee.pipe(tap(employeeResponse => this.setUpdatedEmployee(employeeResponse)),
       switchMap(_=>this.callAfterAddUpdatedEmployee(departmentId)))
-
   }
 
   assignEmployee(actionId: number, departmentId: number, employeeId: number) : Observable<Employee> {
@@ -118,6 +121,7 @@ export class DepartmentService {
       Longitude: actionRequest.lng,
       Latitude: actionRequest.lat
     }
+
     return this.httpClient.post<Action>(this.baseApiUrl + '/actions', addAction);
   }
 
@@ -128,16 +132,12 @@ export class DepartmentService {
       name: actionRequest.name,
       description: actionRequest.description
     }
-    console.log(updateAction);
 
     return this.httpClient.put<Action>(this.baseApiUrl + '/actions/' + actionId, updateAction);
-
   }
 
   deleteAction(actionId: number) : Observable<Action> {
-
     return this.httpClient.delete<Action>(this.baseApiUrl + '/actions/' + actionId);
-
   }
 
   callAfterUpdateEmployee(departmentId: number, employeeId: number) : Observable<Employee> {
@@ -153,7 +153,7 @@ export class DepartmentService {
 
     let employeeAddress = '';
     employeeAddress += this.employeeRequest.street + ", " + this.employeeRequest.city;
-    var employee = this.geocodeEmployees({address: employeeAddress});
+    var employee = this.geocodeEmployee({address: employeeAddress});
 
     return employee.pipe(tap(employeeResponse => this.setUpdatedEmployee(employeeResponse)),
       switchMap(_=>this.callAfterUpdateEmployee(departmentId, employeeId)));
@@ -177,7 +177,7 @@ export class DepartmentService {
     return `${this.baseApiUrl}/${relativePath}`;
   }
 
-  geocodeEmployees(request: google.maps.GeocoderRequest) : Observable<Employee>
+  geocodeEmployee(request: google.maps.GeocoderRequest) : Observable<Employee>
   {
      const result = from(this.geocoder.geocode(request).then((result) => {
 
@@ -190,6 +190,20 @@ export class DepartmentService {
     }));
 
     return result;
+  }
 
+  geocodeDepartment(request: google.maps.GeocoderRequest) : Observable<Department>
+  {
+     const result = from(this.geocoder.geocode(request).then((result) => {
+
+      const { results } = result;
+
+      this.departmentRequest.lat = results[0].geometry.location.lat();
+      this.departmentRequest.lng = results[0].geometry.location.lng();
+
+      return this.departmentRequest;
+    }));
+
+    return result;
   }
 }

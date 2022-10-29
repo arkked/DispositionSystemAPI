@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChildren, QueryList, Output, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChildren, QueryList, Input } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { DepartmentService } from '../departments/department.service';
 import { Action } from '../models/ui-models/action.model';
@@ -53,7 +53,6 @@ export class DialogContentWindowComponent implements OnInit {
       if (this.role === 'Manager' || this.role === 'Admin') {
         this.isAuthorized = true;
       }
-
     }
   }
 
@@ -71,10 +70,8 @@ export class DialogContentWindowComponent implements OnInit {
         });
 
         this.dataSource = new MatTableDataSource(this.actions);
-
       }
     )
-
   }
 
   ngOnChanges() {
@@ -91,7 +88,6 @@ export class DialogContentWindowComponent implements OnInit {
         });
 
         this.dataSource = new MatTableDataSource(this.actions);
-
       }
     )
   }
@@ -106,8 +102,6 @@ export class DialogContentWindowComponent implements OnInit {
   onDeleteAction(actionId: number) : void {
     this.departmentService.deleteAction(actionId)
       .subscribe((successRespone) => {
-
-
         this.snackbar.open('Action has been deleted', undefined, {
           duration: 2000
         });
@@ -123,7 +117,6 @@ export class DialogContentWindowComponent implements OnInit {
           let index = this.actions.indexOf(actionDelete);
           this.actions.splice(index, 1);
         }
-
       },
       (errorResponse) => {
         this.toastr.error("You have to unassign employees first");
@@ -138,7 +131,6 @@ export class DialogContentWindowComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     })
-
   }
 
   onUnassignEmployee(employeeId: number) : void {
@@ -160,7 +152,6 @@ export class DialogContentWindowComponent implements OnInit {
           })
         }
       })
-
     })
   }
 }

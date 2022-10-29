@@ -20,11 +20,11 @@ export class RegisterComponent {
 
   constructor(private auth: AuthService, private router: Router, private http: HttpClient) { }
 
-
-
   register(form: NgForm){
 
     let serializedForm = JSON.stringify(form.value);
+    console.log(serializedForm);
+
     this.http.post("https://localhost:5001/api/account/register", serializedForm, this.httpOptions)
       .subscribe(
         (successResponse) => {
@@ -33,6 +33,4 @@ export class RegisterComponent {
         }
       )
   }
-
-
 }

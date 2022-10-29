@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
@@ -6,16 +6,17 @@ import { MapInfoWindow, MapMarker } from '@angular/google-maps';
   templateUrl: './map-info-window.component.html',
   styleUrls: ['./map-info-window.component.css']
 })
-export class MapInfoWindowComponent implements OnInit {
+export class MapInfoWindowComponent {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor() {}
 
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
 
-  center: google.maps.LatLngLiteral = {lat: 52.91722430065678, lng: 18.792917547308};
+  options: google.maps.InfoWindowOptions = {
+    minWidth: 100
+  }
+
+  center: google.maps.LatLngLiteral = { lat: 52.91722430065678, lng: 18.792917547308 };
   markerPositions: google.maps.LatLngLiteral[] = [];
   zoom = 6;
 
