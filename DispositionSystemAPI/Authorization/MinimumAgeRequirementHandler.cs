@@ -20,7 +20,7 @@ namespace DispositionSystemAPI.Authorization
             var dateOfBirth = DateTime.Parse(context.User.FindFirst(c => c.Type == "DateOfBirth").Value);
 
 
-            var userEmail = context.User.FindFirst(c => c.Type == ClaimTypes.Name).Value;   // claim dla którego typem będzie standardowy claim dla nazwy użytkownika
+            var userEmail = context.User.FindFirst(c => c.Type == ClaimTypes.Name).Value; 
 
             _logger.LogInformation($"User: {userEmail} with date of birth: [{dateOfBirth}]");
 

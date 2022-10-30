@@ -6,7 +6,6 @@ namespace DispositionSystemAPI.Exceptions
     {
         public ForbidException()
         {
-
         }
 
         public ForbidException(string message) : base(message)

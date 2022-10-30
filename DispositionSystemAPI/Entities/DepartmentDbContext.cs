@@ -12,19 +12,12 @@ namespace DispositionSystemAPI.Entities
         private readonly string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=DepartmentDb;Trusted_Connection=True;";
 
         public DbSet<Department> Departments { get; set; }
-
         public DbSet<DepartmentAddress> DepartmentAddresses { get; set; }
-
         public DbSet<EmployeeAddress> EmployeeAddresses { get; set; }
-
         public DbSet<Employee> Employees { get; set; }
-
         public DbSet<User> Users { get; set; }
-
         public DbSet<Role> Roles { get; set; }
-
         public DbSet<Action> Actions { get; set; }
-
         public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,13 +63,11 @@ namespace DispositionSystemAPI.Entities
                 .Property(a => a.Street)
                 .IsRequired()
                 .HasMaxLength(50);
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionString);
         }
-
     }
 }

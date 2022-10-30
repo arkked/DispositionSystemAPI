@@ -39,7 +39,6 @@ namespace DispositionSystemAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var authenticationSettings = new AuthenticationSettings();
@@ -73,9 +72,6 @@ namespace DispositionSystemAPI
 
             });
 
-            
-            //services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>(); // do kolekcji serwisów dla typu IAUthorizationHandler rejestrujemy klasê MinimumAgeRequirementHandler()
-            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddFluentValidation();
             services.AddDbContext<DepartmentDbContext>();
             services.AddScoped<DepartmentSeeder>();
@@ -92,7 +88,6 @@ namespace DispositionSystemAPI
             services.AddScoped<IValidator<EmployeeDto>, AddEmployeeDtoValidator>();
             services.AddScoped<IValidator<DepartmentDto>, AddDepartmentDtoValidator>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IUserContextService, UserContextService>();
             services.AddHttpContextAccessor();
             services.AddSwaggerGen();
             

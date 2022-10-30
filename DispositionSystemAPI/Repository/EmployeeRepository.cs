@@ -21,19 +21,16 @@ namespace DispositionSystemAPI.Repository
         private readonly IMapper mapper;
         private readonly ILogger<EmployeeRepository> logger;
         private readonly IAuthorizationService authorizationService;
-        private readonly IUserContextService userContextService;
         private readonly IHubContext<NotificationHub, INotificationsHub> notificationsHubContext;
 
         public EmployeeRepository(DepartmentDbContext context, IMapper mapper, ILogger<EmployeeRepository> logger,
-            IAuthorizationService authorizationService, IUserContextService userContextService, IHubContext<NotificationHub, INotificationsHub> notificationsHubContext)
+            IAuthorizationService authorizationService, IHubContext<NotificationHub, INotificationsHub> notificationsHubContext)
         {
             this.context = context;
             this.mapper = mapper;
             this.logger = logger;
             this.authorizationService = authorizationService;
-            this.userContextService = userContextService;
             this.notificationsHubContext = notificationsHubContext;
-
         }
 
         public async Task<int> Create(int departmentId, AddEmployeeDto dto)
@@ -98,14 +95,6 @@ namespace DispositionSystemAPI.Repository
 
             if (employee == null) throw new NotFoundException("Employee not found.");
 
-            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
-            //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
-
-            //if (!authorizationResult.Succeeded)
-            //{
-            //    throw new ForbidException("Authorization failed");
-            //}
-
             employee.FirstName = dto.FirstName;
             employee.LastName = dto.LastName;
             employee.Email = dto.Email;
@@ -120,18 +109,19 @@ namespace DispositionSystemAPI.Repository
             {
                 var action = await this.context.Actions.FirstOrDefaultAsync(d => d.Id == employee.ActionId);
 
-                if (action == null) throw new NotFoundException("Action not found.");
+                if (action != null)
+                {
+                    var user = await this.context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email);
 
-                var user = await this.context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email);
+                    if (user == null) throw new NotFoundException("User not found.");
 
-                if (user == null) throw new NotFoundException("User not found.");
+                    var notification = await this.context.Notifications.FirstOrDefaultAsync(x => x.UserId == user.Id);
 
-                var notification = await this.context.Notifications.FirstOrDefaultAsync(x => x.UserId == user.Id);
+                    if (notification == null) throw new NotFoundException("Notification not found.");
 
-                if (notification == null) throw new NotFoundException("Notification not found.");
-           
-                action.Employees.Remove(employee);
-                this.context.Notifications.Remove(notification);
+                    action.Employees.Remove(employee);
+                    this.context.Notifications.Remove(notification);
+                }    
             }
 
             this.logger.LogInformation($"Employee with id: {employeeId} UPDATE action invoked. Updated data: '{employee.FirstName}' to '{dto.FirstName}', '{employee.LastName}' to '{dto.LastName}'");
@@ -183,8 +173,6 @@ namespace DispositionSystemAPI.Repository
             }
             action.Employees.Add(employee);
 
-            //TODO send notification here
-
             var notification = new Notification { Name = action.Name, Description = action.Description, Lat = action.Lat, Lng = action.Lng, UserId = user.Id };
             
             await this.context.Notifications.AddAsync(notification);
@@ -199,7 +187,6 @@ namespace DispositionSystemAPI.Repository
             await this.notificationsHubContext.Clients.Client(user.ConnectionId).SendNotification(new Notification() { Id = action.Id, Name = action.Name, Lat = action.Lat, Lng = action.Lng, Description = action.Description});
 
             await this.context.SaveChangesAsync();
-
         }
 
         private async Task<Department> GetDepartmentById(int departmentId)

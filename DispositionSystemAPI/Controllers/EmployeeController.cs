@@ -13,7 +13,7 @@ namespace DispositionSystemAPI.Controllers
 {
     [Route("api/department/{departmentId}/employee")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository employeeRepository;
@@ -29,8 +29,6 @@ namespace DispositionSystemAPI.Controllers
             var newEmpoyeeId = await this.employeeRepository.Create(departmentId, dto);
 
             return Created($"api/department/{departmentId}/employee/{newEmpoyeeId}", null);
-
-
         }
 
         [HttpPut("{employeeId}")]
@@ -70,8 +68,6 @@ namespace DispositionSystemAPI.Controllers
             return NoContent();
         }
 
-
-        //TODO Query parameters
         [HttpPost("{employeeId}")]
         public async Task<ActionResult> AssignToAction([FromRoute] int employeeId, [FromBody] string actionId)
         {

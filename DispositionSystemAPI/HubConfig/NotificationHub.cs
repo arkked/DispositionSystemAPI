@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace DispositionSystemAPI.HubConfig
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotificationHub : Hub<INotificationsHub>, INotificationsHub
     {
         private static ConcurrentDictionary<string, User> Users = new ConcurrentDictionary<string, User>();
@@ -36,7 +35,6 @@ namespace DispositionSystemAPI.HubConfig
             if (httpContext != null)
             {
                 var jwtToken = httpContext.Request.Query["access_token"];
-
 
                 if (!string.IsNullOrEmpty(jwtToken))
                 {

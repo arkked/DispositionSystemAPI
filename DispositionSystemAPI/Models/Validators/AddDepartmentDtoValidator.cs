@@ -39,7 +39,6 @@ namespace DispositionSystemAPI.Models.Validators
                 .NotEmpty()
                 .WithMessage("Postal code can not be empty");
 
-
         }
     }
 }

@@ -6,6 +6,5 @@ namespace DispositionSystemAPI.HubConfig
     public interface INotificationsHub
     {
         Task SendNotification(Notification notification);
-
     }
 }

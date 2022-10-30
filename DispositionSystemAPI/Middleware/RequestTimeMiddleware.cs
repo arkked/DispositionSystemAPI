@@ -14,7 +14,6 @@ namespace DispositionSystemAPI.Middleware
 
         private readonly Stopwatch _stopWatch;
 
-
         public RequestTimeMiddleware(ILogger<RequestTimeMiddleware> logger)
         {
             _logger = logger;
@@ -22,9 +21,7 @@ namespace DispositionSystemAPI.Middleware
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-        {
-
-           
+        {   
             _stopWatch.Start();
             await next.Invoke(context);
             _stopWatch.Stop();
@@ -37,8 +34,7 @@ namespace DispositionSystemAPI.Middleware
                 string message = $"Request [{context.Request.Method}] at {context.Request.Path} took {ts.TotalMilliseconds} ms";
                 _logger.LogInformation(message);
             
-            }
-        
+            }     
         }
     }
 }

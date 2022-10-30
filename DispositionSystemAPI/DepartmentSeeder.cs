@@ -78,11 +78,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Jan",
                             LastName = "Kowalski",
+                            Email = "jan@kowalski.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
-                                Street = "Moniuszki 42/134"
+                                Street = "Słowicza 4"
                             }
                         },
 
@@ -90,11 +91,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Adam",
                             LastName = "Nowak",
+                            Email = "adam@nowak.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
-                                Street = "Cmentarna 31"
+                                Street = "Wschodnia 2"
                             }
 
                         },
@@ -103,11 +105,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Michał",
                             LastName = "Kołodziej",
+                            Email = "michal@kolodziej.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Lubliniec",
                                 PostalCode = "42-700",
-                                Street = "Chłopska 13"
+                                Street = "Leśna 13"
                             }
                         }
                     },
@@ -115,7 +118,7 @@ namespace DispositionSystemAPI
                     Address = new DepartmentAddress()
                     {
                         City = "Lubliniec",
-                        Street = "Kościuszki 31",
+                        Street = "Droniowicka 10",
                         PostalCode = "42-700"
                     }
                 },
@@ -133,6 +136,7 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Zbigniew",
                             LastName = "Maruszczyk",
+                            Email = "zbigniew@maruszczyk.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
@@ -145,11 +149,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Łucjan",
                             LastName = "Szpak",
+                            Email = "lucjan@szpak.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
                                 PostalCode = "42-600",
-                                Street = "Długa 41"
+                                Street = "Zamkowa 3"
                             }
 
                         },
@@ -158,11 +163,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Kamil",
                             LastName = "Polak",
+                            Email = "kamil@polak.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Tarnowskie Góry",
                                 PostalCode = "42-600",
-                                Street = "Chłopska 13"
+                                Street = "Ligonia 2"
                             }
                         }
                     },
@@ -188,11 +194,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Łukasz",
                             LastName = "Brzoza",
+                            Email = "lukasz@brzoza.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
-                                PostalCode = "42‑226",
-                                Street = "Kolorowa 2"
+                                PostalCode = "42‑202",
+                                Street = "Piastowska 4"
                             }
                         },
 
@@ -200,11 +207,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Karol",
                             LastName = "Przybysz",
+                            Email = "karol@przybysz.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
-                                PostalCode = "42‑226",
-                                Street = "Zielona 31a"
+                                PostalCode = "42‑202",
+                                Street = "Piaskowa 2"
                             }
 
                         },
@@ -213,11 +221,12 @@ namespace DispositionSystemAPI
                         {
                             FirstName = "Jan",
                             LastName = "Niemiec",
+                            Email = "jan@niemiec.com",
                             Address = new EmployeeAddress()
                             {
                                 City = "Częstochowa",
-                                PostalCode = "42‑226",
-                                Street = "Korfantego 21"
+                                PostalCode = "42‑202",
+                                Street = "Gazowa 4"
                             }
                         }
                     },
@@ -225,17 +234,13 @@ namespace DispositionSystemAPI
                     Address = new DepartmentAddress()
                     {
                         City = "Częstochowa",
-                        Street = "Główna 51",
-                        PostalCode = "42‑226"
+                        Street = "Piastowska 2",
+                        PostalCode = "42‑202"
                     }
                 }
-
-
-
             };
 
             return departments;
-
         }
 
     }

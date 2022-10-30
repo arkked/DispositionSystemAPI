@@ -4,14 +4,16 @@ using DispositionSystemAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DispositionSystemAPI.Migrations
 {
     [DbContext(typeof(DepartmentDbContext))]
-    partial class DepartmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027213410_addLatLngToDepartments")]
+    partial class addLatLngToDepartments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,6 +64,9 @@ namespace DispositionSystemAPI.Migrations
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CreatedById")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -80,6 +85,8 @@ namespace DispositionSystemAPI.Migrations
 
                     b.HasIndex("AddressId")
                         .IsUnique();
+
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("Departments");
                 });
@@ -277,7 +284,13 @@ namespace DispositionSystemAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DispositionSystemAPI.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
                     b.Navigation("Address");
+
+                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("DispositionSystemAPI.Entities.Employee", b =>

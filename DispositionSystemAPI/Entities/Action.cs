@@ -11,6 +11,4 @@ namespace DispositionSystemAPI.Entities
         public double Lat { get; set; }
         public virtual List<Employee> Employees { get; set; }
     }
-
-
 }

@@ -7,7 +7,7 @@ namespace DispositionSystemAPI.Repository
     public interface IDepartmentRepository
     {
         Task<DepartmentDto> GetById(int id);
-        Task<List<DepartmentDto>> GetAll(/*DepartmentQuery query*/);
+        Task<List<DepartmentDto>> GetAll();
         Task<int> Create(CreateDepartmentDto dto);
         Task Delete(int id);
         Task Update(int id, UpdateDepartmentDto dto);

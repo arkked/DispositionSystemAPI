@@ -1,26 +1,17 @@
-﻿using AutoMapper;
-using DispositionSystemAPI.Entities;
-using DispositionSystemAPI.Models;
+﻿using DispositionSystemAPI.Models;
 using DispositionSystemAPI.Repository;
-using DispositionSystemAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DispositionSystemAPI.Controllers
 {
-
     [Route("api/department")]
     [ApiController]
     [Authorize]
     public class DepartmentController : ControllerBase
     {
-
         private readonly IDepartmentRepository departmentRepository;
         public DepartmentController(IDepartmentRepository departmentRepository)
         {
@@ -46,13 +37,11 @@ namespace DispositionSystemAPI.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> CreateDepartment([FromBody]CreateDepartmentDto dto)
         {
-           // var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var id = await this.departmentRepository.Create(dto);
             return Created($"/api/department/{id}", null);
         }
         
         [HttpGet]
-        //[Authorize(Policy = "AtLeast18")]
         public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll() 
         {
             var departmentsDtos = await this.departmentRepository.GetAll();

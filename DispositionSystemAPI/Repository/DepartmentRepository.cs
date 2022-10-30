@@ -21,22 +21,19 @@ namespace DispositionSystemAPI.Repository
         private readonly IMapper mapper;
         private readonly ILogger<DepartmentRepository> logger;
         private readonly IAuthorizationService authorizationService;
-        private readonly IUserContextService userContextService;
 
         public DepartmentRepository(DepartmentDbContext context, IMapper mapper, ILogger<DepartmentRepository> logger,
-            IAuthorizationService authorizationService, IUserContextService userContextService)
+            IAuthorizationService authorizationService)
         {
             this.context = context;
             this.mapper = mapper;
             this.logger = logger;
             this.authorizationService = authorizationService;
-            this.userContextService = userContextService;
         }
 
         public async Task<int> Create(CreateDepartmentDto dto)
         {
             var department = this.mapper.Map<Department>(dto);
-            //department.CreatedById = _userContextService.GetUserId;
             await this.context.Departments.AddAsync(department);
             await this.context.SaveChangesAsync();
 
@@ -47,31 +44,17 @@ namespace DispositionSystemAPI.Repository
         {
             this.logger.LogError($"Department with id: {id} DELETE action invoked");
 
-
             var department = await this.context
                   .Departments
                   .FirstOrDefaultAsync(d => d.Id == id);
 
             var address = await this.context.DepartmentAddresses.FirstOrDefaultAsync(d => d.Id == department.AddressId);
 
-
             if (department is null) throw new NotFoundException("Department not found");
-
-            
-            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
-            //new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
-
-            //if (!authorizationResult.Succeeded)
-            //{
-            //    throw new ForbidException("Authorization failed");
-            //}
-
 
             this.context.DepartmentAddresses.Remove(address);
             this.context.Departments.Remove(department);
             await this.context.SaveChangesAsync();
-            
-           
         }
 
         public async Task<List<DepartmentDto>> GetAll()
@@ -108,26 +91,19 @@ namespace DispositionSystemAPI.Repository
 
             if (department is null) throw new NotFoundException("Department not found");
 
-            //var authorizationResult = authorizationService.AuthorizeAsync(userContextService.User, department,
-            //    new ResourceOperationRequirement(ResourceOperation.Update)).Result;
-
-            //if (!authorizationResult.Succeeded)
-            //{
-            //    throw new ForbidException("Authorization failed");
-            //}
-
             department.Name = dto.Name;
             department.Description = dto.Description;
             department.Category = dto.Category;
             department.ContactEmail = dto.ContactEmail;
             department.ContactNumber = dto.ContactNumber;
+            department.Lat = dto.Lat;
+            department.Lng = dto.Lng;
 
             department.Address = mapper.Map<DepartmentAddress>(dto);
 
             this.logger.LogInformation($"Department with id: {id} UPDATE action invoked. Updated data: '{department.Name}' to '{dto.Name}', '{department.Description}' to '{dto.Description}'");
 
             await this.context.SaveChangesAsync();
-
         }
     }
 }

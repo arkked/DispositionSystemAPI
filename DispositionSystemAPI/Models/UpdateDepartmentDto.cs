@@ -8,7 +8,6 @@ namespace DispositionSystemAPI.Models
 {
     public class UpdateDepartmentDto
     {
-
         [Required]
         [MaxLength(25)]
         public string Name { get; set; }
@@ -19,7 +18,7 @@ namespace DispositionSystemAPI.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string PostalCode { get; set; }
-
-
+        public double Lat { get; set; }
+        public double Lng { get; set; }
     }
 }
