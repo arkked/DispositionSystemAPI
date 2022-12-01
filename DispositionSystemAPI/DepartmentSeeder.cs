@@ -46,7 +46,7 @@ namespace DispositionSystemAPI
             {
                 new Role()
                 {
-                    Name = "User"
+                    Name = "Employee"
                 },
                 new Role()
                 {
